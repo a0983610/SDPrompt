@@ -33,7 +33,7 @@
                 <i data-lucide="sparkles" class="text-pink-500"></i>
                 SD 提示詞生成器 <span class="text-sm font-normal text-zinc-500 ml-2 border border-zinc-700 rounded px-2 py-0.5">離線版</span>
             </h1>
-            <div class="text-xs text-zinc-500 font-mono">v3.6 Chinese Labels</div>
+            <div class="text-xs text-zinc-500 font-mono">v3.7 Chinese Labels</div>
         </div>
     </header>
 
@@ -390,7 +390,6 @@
                     { value: "cleavage", label: "乳溝" },
                     { value: "sideboob", label: "側乳" },
                     { value: "underboob", label: "南半球" },
-                    { value: "paizuri", label: "乳夾(H)" },
                     { value: "abs", label: "腹肌" },
                     { value: "navel", label: "肚臍" },
                     { value: "collarbone", label: "鎖骨" },
@@ -408,44 +407,117 @@
             r18: {
                 name: "瑟瑟",
                 tags: [
-                    { value: "nsfw", label: "nsfw" },
-                    { value: "naked", label: "裸露" },
+                    // --- 基礎狀態 ---
+                    { value: "nsfw", label: "NSFW (核心)" },
+                    { value: "naked", label: "全裸" },
+                    { value: "nude", label: "裸體" },
+                    { value: "topless", label: "上空/露胸" },
+                    { value: "bottomless", label: "下空/無內褲" },
+                    
+                    // --- 器官特寫 ---
                     { value: "penis", label: "陰莖" },
                     { value: "erection", label: "勃起" },
+                    { value: "glans", label: "龜頭" },
+                    { value: "veiny penis", label: "青筋老二" },
+                    { value: "condom", label: "保險套" },
                     { value: "nipples", label: "乳頭" },
+                    { value: "erect nipples", label: "乳頭硬挺" },
                     { value: "pussy", label: "小穴" },
-                    { value: "vaginal", label: "陰道" },
                     { value: "anal", label: "肛門" },
+                    { value: "pussy juice", label: "愛液" },
+                    { value: "cameltoe", label: "駱駝蹄" },
+                    { value: "anus", label: "肛門" },
+                    
+                    // --- 前戲與互動 ---
                     { value: "fingering", label: "指交" },
-                    { value: "masturbation", label: "自慰" },
                     { value: "male masturbation", label: "男性自慰" },
                     { value: "female masturbation", label: "女性自慰" },
                     { value: "clothed masturbation", label: "穿衣自慰" },
-                    { value: "masturbation through clothes", label: "隔著衣服自慰" },
+					{ value: "masturbation through clothes", label: "隔著衣服自慰" },
                     { value: "pillow humping", label: "枕頭摩擦" },
                     { value: "table humping", label: "桌腳摩擦" },
                     { value: "dildo riding", label: "假陽具騎乘" },
-                    { value: "public masturbation", label: "公共自慰" },
+					{ value: "public masturbation", label: "公共自慰" },
                     { value: "tail masturbation", label: "尾巴自慰" },
                     { value: "fellatio", label: "口交" },
+                    { value: "cunnilingus", label: "舔穴(女)" },
+                    { value: "deepthroat", label: "深喉嚨" },
+                    { value: "face fucking", label: "口交(動態)" },
                     { value: "handjob", label: "手交" },
                     { value: "paizuri", label: "乳交" },
-                    { value: "footjob", label: "足交" },
+					{ value: "footjob", label: "足交" },
                     { value: "simulated fellatio", label: "模擬口交(物體)" },
                     { value: "simulated handjob", label: "模擬手交(物體)" },
                     { value: "simulated paizuri", label: "模擬乳交(物體)" },
                     { value: "simulated footjob", label: "模擬足交(物體)" },
                     { value: "spread pussy", label: "張開小穴" },
                     { value: "spread anus", label: "張開屁股" },
-                    { value: "sex from behind", label: "後入性交" },
+                    { value: "breast sucking", label: "吸奶" },
+                    { value: "kissing", label: "親吻" },
+                    { value: "french kiss", label: "舌吻" },
+                    { value: "spitroast", label: "雙龍(口+陰)" },
+                    
+                    // --- 性交體位 ---
+                    { value: "sex", label: "性交" },
+                    { value: "vaginal", label: "陰道性交" },
+                    { value: "missionary", label: "傳教士" },
                     { value: "doggystyle", label: "狗爬式" },
                     { value: "cowgirl position", label: "騎乘位" },
-                    { value: "missionary", label: "傳教士" },
+                    { value: "reverse cowgirl", label: "反向騎乘" },
+                    { value: "mating press", label: "抱腿性交(Mating Press)" },
+                    { value: "standing sex", label: "站立性交" },
+                    { value: "spooning", label: "側入/湯匙式" },
+                    { value: "straddling", label: "跨坐" },
+                    { value: "legs over head", label: "M字開腳(抬腿)" },
+                    { value: "69", label: "69式" },
+                    { value: "gangbang", label: "輪姦/多對一" },
+                    { value: "threesome", label: "3P" },
+                    { value: "group sex", label: "群交" },
+
+                    // --- 玩法與Play ---
+                    { value: "masturbation", label: "自慰" },
+                    { value: "fingering self", label: "手指自慰" },
+                    { value: "sex toys", label: "情趣玩具" },
+                    { value: "dildo", label: "假陽具" },
+                    { value: "vibrator", label: "跳蛋/按摩棒" },
+                    { value: "bondage", label: "綑綁" },
+                    { value: "rope", label: "繩子" },
+                    { value: "shibari", label: "日式龜甲縛" },
+                    { value: "bdsm", label: "BDSM" },
+                    { value: "spanking", label: "打屁股" },
+                    { value: "choking", label: "勒頸/掐脖" },
+                    { value: "gag", label: "口球" },
+                    { value: "blindfold", label: "蒙眼" },
+                    { value: "suspended", label: "懸吊" },
+                    { value: "tentacles", label: "觸手" },
+                    { value: "femdom", label: "女帝/女攻" },
+                    { value: "netorare", label: "NTR" },
+                    { value: "public sex", label: "野外/公眾性交" },
+                    { value: "exhibitionism", label: "露出/暴露" },
+                    
+                    // --- 射精與液體 ---
                     { value: "cum", label: "精液" },
                     { value: "creampie", label: "內射" },
-                    { value: "bukkake", label: "顏射" },
+                    { value: "cum in pussy", label: "陰道內射" },
+                    { value: "cum in mouth", label: "口內射精" },
                     { value: "cum on body", label: "身體射精" },
-                    { value: "tentacles", label: "觸手" }
+                    { value: "cum on face", label: "顏射" },
+                    { value: "bukkake", label: "顏射(大量)" },
+                    { value: "cum drip", label: "精液流出" },
+                    { value: "after sex", label: "事後" },
+                    { value: "covered in cum", label: "全身精液" },
+                    { value: "squirting", label: "潮吹" },
+
+                    // --- 特殊視角/透視 (超實用) ---
+                    { value: "x-ray", label: "X光透視" },
+                    { value: "cross-section", label: "斷面圖" },
+                    { value: "internal view", label: "體內視角" },
+                    { value: "pov", label: "第一人稱視角" },
+                    
+                    // --- 衣服狀態 ---
+                    { value: "lifted skirt", label: "掀裙子" },
+                    { value: "panties aside", label: "撥開內褲" },
+                    { value: "half-removed clothes", label: "衣衫半解" }
                 ]
             },
             action: {
@@ -758,7 +830,6 @@
                     { value: "bat wings", label: "蝙蝠翅膀" },
                     { value: "angel wings", label: "天使翅膀" },
                     { value: "tail", label: "尾巴" },
-                    { value: "holding weapon", label: "拿武器" },
                     { value: "sword", label: "劍" },
                     { value: "katana", label: "武士刀" },
                     { value: "knife", label: "刀" },
@@ -773,7 +844,30 @@
                     { value: "cigarette", label: "香菸" },
                     { value: "umbrella", label: "雨傘" },
                     { value: "bag", label: "包包" },
-                    { value: "backpack", label: "背包" }
+                    { value: "backpack", label: "背包" },
+                    // --- 擴充：樂器與生活用品 ---
+                    { value: "instrument", label: "樂器" },
+                    { value: "guitar", label: "吉他" },
+                    { value: "violin", label: "小提琴" },
+                    { value: "piano", label: "鋼琴" },
+                    { value: "microphone", label: "麥克風" },
+                    { value: "smartphone", label: "智慧型手機" },
+                    { value: "camera", label: "相機" },
+                    { value: "book", label: "書" },
+                    { value: "flower", label: "花" },
+                    { value: "bouquet", label: "花束" },
+                    { value: "transparent umbrella", label: "透明傘" },
+                    
+                    // --- 擴充：食物 ---
+                    { value: "food", label: "食物" },
+                    { value: "cake", label: "蛋糕" },
+                    { value: "ice cream", label: "冰淇淋" },
+                    { value: "chocolate", label: "巧克力" },
+                    { value: "tea", label: "茶" },
+                    { value: "coffee", label: "咖啡" },
+                    { value: "alcohol", label: "酒" },
+                    { value: "wine glass", label: "酒杯" },
+                    { value: "bottle", label: "瓶子" }
                 ]
             },
             environment: {
