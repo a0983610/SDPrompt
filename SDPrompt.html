@@ -22,6 +22,16 @@
             background-color: #09090b; /* zinc-950 */
             color: #e4e4e7; /* zinc-200 */
         }
+        /* 拖曳時的樣式 */
+        .dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+            border-color: #3b82f6; /* blue-500 */
+        }
+        /* 按住 Ctrl 時改變游標提示 */
+        body.ctrl-pressed .draggable-tag {
+            cursor: move !important;
+        }
     </style>
 </head>
 <body class="h-screen font-sans selection:bg-pink-500 selection:text-white flex flex-col overflow-hidden">
@@ -81,7 +91,9 @@
 
             <!-- 2. 已選標籤顯示區 (點擊可刪除，顯示中文) -->
             <div id="selected-tags-wrapper" class="hidden">
-                <div class="text-xs text-zinc-500 mb-1 ml-1 font-medium">已選標籤 (點擊移除):</div>
+                <div class="flex justify-between items-end mb-1 ml-1">
+                    <div class="text-xs text-zinc-500 font-medium">已選標籤 (點擊移除，<span class="text-blue-400">按住 Ctrl 拖曳排序</span>):</div>
+                </div>
                 <div id="selected-tags-container" class="flex flex-wrap gap-2">
                     <!-- JS 動態生成 -->
                 </div>
@@ -1566,6 +1578,7 @@
         let activeTab = "character";
         let activeGroupIndex = -1; // -1 表示顯示全部
         let tagValueToLabel = {}; // 用於反查 Label
+        let draggedItemIndex = null; // 拖曳項目的索引
 
         const positiveInput = document.getElementById("positive-input");
         const negativeInput = document.getElementById("negative-input");
@@ -1610,6 +1623,18 @@
              // 初始化高度
             autoResize(positiveInput);
             autoResize(negativeInput);
+
+            // 監聽鍵盤事件以改變游標樣式
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Control') {
+                    document.body.classList.add('ctrl-pressed');
+                }
+            });
+            window.addEventListener('keyup', (e) => {
+                if (e.key === 'Control') {
+                    document.body.classList.remove('ctrl-pressed');
+                }
+            });
         }
 
         // --- Magic Button Logic ---
@@ -1636,6 +1661,53 @@
             showNotification("已加入高品質起手式！");
         }
 
+        // --- 拖曳排序處理 ---
+        function handleDragStart(e, index) {
+            // 如果沒有按住 Ctrl，阻止拖曳，讓點擊事件正常觸發
+            if (!e.ctrlKey) {
+                e.preventDefault();
+                return;
+            }
+            draggedItemIndex = index;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', index); // 雖然只用變數，但設置 data 是好習慣
+            
+            // 加入視覺回饋
+            setTimeout(() => {
+                e.target.classList.add('dragging');
+            }, 0);
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+            draggedItemIndex = null;
+        }
+
+        function handleDragOver(e) {
+            // 必須阻止預設行為才能允許放置
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        }
+
+        function handleDrop(e, targetIndex) {
+            e.preventDefault();
+            
+            if (draggedItemIndex === null || draggedItemIndex === targetIndex) return;
+
+            let currentTags = positiveInput.value.split(',').map(t => t.trim()).filter(t => t);
+            
+            // 移動元素
+            const itemToMove = currentTags[draggedItemIndex];
+            currentTags.splice(draggedItemIndex, 1); // 移除
+            currentTags.splice(targetIndex, 0, itemToMove); // 插入新位置
+
+            // 更新並重新渲染
+            positiveInput.value = currentTags.join(', ');
+            updateCount();
+            renderSelectedTags();
+            // 注意：renderTags 是下方選擇區，不需重繪，因為選擇狀態沒變
+        }
+
         // --- 渲染已選標籤 ---
         function renderSelectedTags() {
             const currentTags = positiveInput.value.split(',').map(t => t.trim()).filter(t => t);
@@ -1647,16 +1719,21 @@
                 return;
             }
 
-            selectedTagsContainer.innerHTML = currentTags.map(tag => {
+            selectedTagsContainer.innerHTML = currentTags.map((tag, index) => {
                 const label = tagValueToLabel[tag] || tag;
                 return `
                 <button 
+                    draggable="true"
+                    ondragstart="handleDragStart(event, ${index})"
+                    ondragend="handleDragEnd(event)"
+                    ondragover="handleDragOver(event)"
+                    ondrop="handleDrop(event, ${index})"
                     onclick="removeTag('${tag.replace(/'/g, "\\'")}')"
-                    class="group flex items-center gap-1 px-3 py-1 bg-zinc-800/80 border border-zinc-700/50 rounded-full text-xs text-zinc-300 hover:bg-red-900/30 hover:border-red-500/50 hover:text-red-300 transition-all"
-                    title="點擊移除此標籤"
+                    class="draggable-tag group flex items-center gap-1 px-3 py-1 bg-zinc-800/80 border border-zinc-700/50 rounded-full text-xs text-zinc-300 hover:bg-red-900/30 hover:border-red-500/50 hover:text-red-300 transition-all select-none"
+                    title="點擊移除，按住 Ctrl 拖曳排序"
                 >
                     <span>${label}</span>
-                    <i data-lucide="x" width="12" height="12" class="opacity-50 group-hover:opacity-100"></i>
+                    <i data-lucide="x" width="12" height="12" class="opacity-50 group-hover:opacity-100 pointer-events-none"></i>
                 </button>
             `}).join('');
             
