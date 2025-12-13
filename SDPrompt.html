@@ -31,9 +31,9 @@
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <h1 class="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-400 to-pink-500 bg-clip-text text-transparent flex items-center gap-2">
                 <i data-lucide="sparkles" class="text-pink-500"></i>
-                SD 提示詞生成器 <span class="text-sm font-normal text-zinc-500 ml-2 border border-zinc-700 rounded px-2 py-0.5">離線版</span>
+                SD 提示詞生成器 <span class="text-sm font-normal text-zinc-500 ml-2 border border-zinc-700 rounded px-2 py-0.5">v3.8 子分類版</span>
             </h1>
-            <div class="text-xs text-zinc-500 font-mono">v3.7 Chinese Labels</div>
+            <div class="text-xs text-zinc-500 font-mono hidden md:block">Optimized for Workflow</div>
         </div>
     </header>
 
@@ -57,7 +57,7 @@
                     </div>
                 </div>
                 <!-- textarea -->
-                <textarea id="positive-input"
+                <textarea id="positive-input" 
                     class="flex-1 w-full bg-zinc-950 border border-zinc-800 rounded-lg p-3 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 text-zinc-300 font-mono leading-relaxed placeholder:text-zinc-700 overflow-hidden resize-none min-h-[4rem]"
                     placeholder="點擊下方標籤選擇基礎詞彙..."
                     oninput="autoResize(this)"
@@ -77,22 +77,30 @@
                 </div>
             </div>
 
-            <!-- 3. 標籤選擇區 -->
-            <div class="bg-zinc-900 rounded-xl border border-zinc-800 shadow-lg overflow-hidden">
-                <!-- 分類 Tabs -->
-                <div id="tabs-container" class="flex overflow-x-auto border-b border-zinc-800 scrollbar-hide">
+            <!-- 3. 標籤選擇區 (含子頁籤) -->
+            <div class="bg-zinc-900 rounded-xl border border-zinc-800 shadow-lg overflow-hidden flex flex-col">
+                <!-- 大分類 Tabs -->
+                <div id="tabs-container" class="flex overflow-x-auto border-b border-zinc-800 scrollbar-hide bg-zinc-900 z-10">
                     <!-- Tabs will be injected here by JS -->
                 </div>
 
+                <!-- 子分類 Tabs -->
+                <div class="border-b border-zinc-800/50 bg-zinc-900/50 px-4 py-3 overflow-x-auto scrollbar-hide">
+                    <div id="sub-tabs-container" class="flex gap-2 min-w-max">
+                        <!-- Sub-tabs will be injected here by JS -->
+                    </div>
+                </div>
+
                 <!-- 標籤列表 -->
-                <div class="p-6 bg-zinc-900/50">
-                    <div id="tags-grid" class="flex flex-wrap gap-2 content-start">
+                <div class="p-6 bg-zinc-900/30 flex-1 min-h-[300px]">
+                    <div id="tags-grid" class="flex flex-wrap gap-2 content-start transition-opacity duration-200">
                         <!-- Tags will be injected here by JS -->
                     </div>
                     
                     <div class="mt-8 pt-6 border-t border-zinc-800/50">
-                        <div class="text-zinc-600 text-sm">
-                            提示：您可以組合不同分類的標籤。若需要調整權重，請在上方輸入框中將詞彙用括號包起來，例如 <code class="bg-zinc-800 px-1 rounded text-pink-400">(tag:1.3)</code>
+                        <div class="text-zinc-600 text-sm flex items-center gap-2">
+                            <i data-lucide="info" width="14" height="14"></i>
+                            <span>提示：上方提供子分類切換。若需調整權重，請將詞彙括號起來，例如 <code class="bg-zinc-800 px-1 rounded text-pink-400">(tag:1.3)</code></span>
                         </div>
                     </div>
                 </div>
@@ -123,7 +131,7 @@
                         </div>
 
                         <!-- 負面提示詞輸入框 -->
-                        <textarea id="negative-input"
+                        <textarea id="negative-input" 
                             class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-3 text-sm focus:outline-none focus:ring-1 focus:ring-red-500 text-zinc-400 font-mono leading-relaxed overflow-hidden resize-none min-h-[6rem]"
                             placeholder="輸入不希望出現的內容..."
                             oninput="autoResize(this)"
@@ -146,1131 +154,1399 @@
             el.style.height = el.scrollHeight + 'px';
         }
 
-        // --- 數據庫 ---
+        // --- 數據庫 (結構重構為 groups) ---
         const tagCategories = {
             character: {
                 name: "人物與種族",
-                tags: [
-                    // --- 基礎與人數 ---
-                    { value: "1girl", label: "1女" },
-                    { value: "solo", label: "單人" },
-                    { value: "2girls", label: "2女" },
-                    { value: "multiple girls", label: "多女" },
-                    { value: "chibi", label: "Q版" },
-                    { value: "doll", label: "人偶" },
-
-                    // --- 年齡與屬性 ---
-                    { value: "little girl", label: "幼女" },
-                    { value: "loli", label: "蘿莉" },
-                    { value: "young girl", label: "少女" },
-                    { value: "woman", label: "女性" },
-                    { value: "mature female", label: "熟女" },
-                    { value: "milf", label: "人妻" },
-                    { value: "gyaru", label: "辣妹" },
-                    { value: "tomboy", label: "假小子" },
-
-                    // --- 職業與身分 ---
-                    { value: "student", label: "學生" },
-                    { value: "schoolgirl", label: "女高中生(JK)" },
-                    { value: "maid", label: "女僕" },
-                    { value: "nurse", label: "護士" },
-                    { value: "police", label: "女警" },
-                    { value: "soldier", label: "軍人" },
-                    { value: "office lady", label: "OL" },
-                    { value: "flight attendant", label: "空服員" },
-                    { value: "teacher", label: "老師" },
-                    { value: "doctor", label: "醫生" },
-                    { value: "scientist", label: "科學家" },
-                    { value: "waitress", label: "服務生" },
-                    { value: "bartender", label: "調酒師" },
-                    { value: "chef", label: "廚師" },
-                    { value: "idol", label: "偶像" },
-                    { value: "streamer", label: "實況主" },
-                    { value: "nun", label: "修女" },
-                    { value: "shrine maiden", label: "巫女" },
-                    { value: "magical girl", label: "魔法少女" },
-                    { value: "witch", label: "魔女" },
-                    { value: "princess", label: "公主" },
-                    { value: "queen", label: "女王" },
-                    { value: "goddess", label: "女神" },
-                    { value: "knight", label: "騎士" },
-                    { value: "kunoichi", label: "女忍者" },
-                    { value: "samurai", label: "武士" },
-                    { value: "pirate", label: "海盜" },
-                    { value: "cowgirl", label: "牛仔" },
-                    { value: "cheerleader", label: "啦啦隊" },
-                    { value: "ballerina", label: "芭蕾舞者" },
-                    { value: "dancer", label: "舞者" },
-                    { value: "athlete", label: "運動員" },
-                    { value: "racing queen", label: "賽車女郎" },
-
-                    // --- 奇幻種族 ---
-                    { value: "elf", label: "精靈" },
-                    { value: "dark elf", label: "黑暗精靈" },
-                    { value: "angel", label: "天使" },
-                    { value: "fallen angel", label: "墮天使" },
-                    { value: "demon", label: "惡魔" },
-                    { value: "succubus", label: "媚魔" },
-                    { value: "vampire", label: "吸血鬼" },
-                    { value: "zombie", label: "殭屍" },
-                    { value: "ghost", label: "幽靈" },
-                    { value: "fairy", label: "妖精" },
-                    { value: "mermaid", label: "美人魚" },
-                    { value: "dragon girl", label: "龍女" },
-                    { value: "oni", label: "鬼族" },
-                    { value: "centaur", label: "人馬" },
-                    { value: "lamia", label: "蛇女" },
-                    { value: "arachne", label: "蜘蛛女" },
-                    { value: "harpy", label: "鳥身女妖" },
-                    { value: "slime girl", label: "史萊姆娘" },
-                    { value: "monster girl", label: "魔物娘" },
-                    { value: "alien", label: "外星人" },
-                    { value: "orc", label: "半獸人" },
-                    { value: "goblin", label: "哥布林" },
-
-                    // --- 獸耳娘 ---
-                    { value: "kemonomimi", label: "獸耳娘(總稱)" },
-                    { value: "cat girl", label: "貓娘" },
-                    { value: "fox girl", label: "狐娘" },
-                    { value: "kitsune", label: "妖狐" },
-                    { value: "wolf girl", label: "狼娘" },
-                    { value: "dog girl", label: "犬娘" },
-                    { value: "bunny girl", label: "兔女郎" },
-                    { value: "cow girl", label: "牛娘" },
-                    { value: "sheep girl", label: "羊娘" },
-                    { value: "mouse girl", label: "鼠娘" },
-                    { value: "horse girl", label: "馬娘" },
-                    { value: "tiger girl", label: "虎娘" },
-                    { value: "lion girl", label: "獅娘" },
-                    { value: "raccoon girl", label: "浣熊娘" },
-
-                    // --- 科幻與人造 ---
-                    { value: "android", label: "人造人" },
-                    { value: "robot", label: "機器人" },
-                    { value: "cyborg", label: "賽博格" },
-                    { value: "mecha musume", label: "機甲娘" },
-                    { value: "hologram", label: "全息影像" }
+                groups: [
+                    {
+                        name: "基礎與人數",
+                        tags: [
+                            { value: "1girl", label: "1女" },
+                            { value: "solo", label: "單人" },
+                            { value: "2girls", label: "2女" },
+                            { value: "multiple girls", label: "多女" },
+                            { value: "chibi", label: "Q版" },
+                            { value: "doll", label: "人偶" }
+                        ]
+                    },
+                    {
+                        name: "年齡與屬性",
+                        tags: [
+                            { value: "little girl", label: "幼女" },
+                            { value: "loli", label: "蘿莉" },
+                            { value: "young girl", label: "少女" },
+                            { value: "woman", label: "女性" },
+                            { value: "mature female", label: "熟女" },
+                            { value: "milf", label: "人妻" },
+                            { value: "gyaru", label: "辣妹" },
+                            { value: "tomboy", label: "假小子" }
+                        ]
+                    },
+                    {
+                        name: "職業與身分",
+                        tags: [
+                            { value: "student", label: "學生" },
+                            { value: "schoolgirl", label: "女高中生(JK)" },
+                            { value: "maid", label: "女僕" },
+                            { value: "nurse", label: "護士" },
+                            { value: "police", label: "女警" },
+                            { value: "soldier", label: "軍人" },
+                            { value: "office lady", label: "OL" },
+                            { value: "flight attendant", label: "空服員" },
+                            { value: "teacher", label: "老師" },
+                            { value: "doctor", label: "醫生" },
+                            { value: "scientist", label: "科學家" },
+                            { value: "waitress", label: "服務生" },
+                            { value: "bartender", label: "調酒師" },
+                            { value: "chef", label: "廚師" },
+                            { value: "idol", label: "偶像" },
+                            { value: "streamer", label: "實況主" },
+                            { value: "nun", label: "修女" },
+                            { value: "shrine maiden", label: "巫女" },
+                            { value: "magical girl", label: "魔法少女" },
+                            { value: "witch", label: "魔女" },
+                            { value: "princess", label: "公主" },
+                            { value: "queen", label: "女王" },
+                            { value: "goddess", label: "女神" },
+                            { value: "knight", label: "騎士" },
+                            { value: "kunoichi", label: "女忍者" },
+                            { value: "samurai", label: "武士" },
+                            { value: "pirate", label: "海盜" },
+                            { value: "cowgirl", label: "牛仔" },
+                            { value: "cheerleader", label: "啦啦隊" },
+                            { value: "ballerina", label: "芭蕾舞者" },
+                            { value: "dancer", label: "舞者" },
+                            { value: "athlete", label: "運動員" },
+                            { value: "racing queen", label: "賽車女郎" }
+                        ]
+                    },
+                    {
+                        name: "奇幻種族",
+                        tags: [
+                            { value: "elf", label: "精靈" },
+                            { value: "dark elf", label: "黑暗精靈" },
+                            { value: "angel", label: "天使" },
+                            { value: "fallen angel", label: "墮天使" },
+                            { value: "demon", label: "惡魔" },
+                            { value: "succubus", label: "媚魔" },
+                            { value: "vampire", label: "吸血鬼" },
+                            { value: "zombie", label: "殭屍" },
+                            { value: "ghost", label: "幽靈" },
+                            { value: "fairy", label: "妖精" },
+                            { value: "mermaid", label: "美人魚" },
+                            { value: "dragon girl", label: "龍女" },
+                            { value: "oni", label: "鬼族" },
+                            { value: "centaur", label: "人馬" },
+                            { value: "lamia", label: "蛇女" },
+                            { value: "arachne", label: "蜘蛛女" },
+                            { value: "harpy", label: "鳥身女妖" },
+                            { value: "slime girl", label: "史萊姆娘" },
+                            { value: "monster girl", label: "魔物娘" },
+                            { value: "alien", label: "外星人" },
+                            { value: "orc", label: "半獸人" },
+                            { value: "goblin", label: "哥布林" }
+                        ]
+                    },
+                    {
+                        name: "獸耳娘",
+                        tags: [
+                            { value: "kemonomimi", label: "獸耳娘(總稱)" },
+                            { value: "cat girl", label: "貓娘" },
+                            { value: "fox girl", label: "狐娘" },
+                            { value: "kitsune", label: "妖狐" },
+                            { value: "wolf girl", label: "狼娘" },
+                            { value: "dog girl", label: "犬娘" },
+                            { value: "bunny girl", label: "兔女郎" },
+                            { value: "cow girl", label: "牛娘" },
+                            { value: "sheep girl", label: "羊娘" },
+                            { value: "mouse girl", label: "鼠娘" },
+                            { value: "horse girl", label: "馬娘" },
+                            { value: "tiger girl", label: "虎娘" },
+                            { value: "lion girl", label: "獅娘" },
+                            { value: "raccoon girl", label: "浣熊娘" }
+                        ]
+                    },
+                    {
+                        name: "科幻與人造",
+                        tags: [
+                            { value: "android", label: "人造人" },
+                            { value: "robot", label: "機器人" },
+                            { value: "cyborg", label: "賽博格" },
+                            { value: "mecha musume", label: "機甲娘" },
+                            { value: "hologram", label: "全息影像" }
+                        ]
+                    }
                 ]
             },
             hair: {
                 name: "髮型與髮色",
-                tags: [
-                    // --- 髮長 ---
-                    { value: "short hair", label: "短髮" },
-                    { value: "medium hair", label: "中長髮" },
-                    { value: "long hair", label: "長髮" },
-                    { value: "very long hair", label: "超長髮" },
-                    { value: "absurdly long hair", label: "極長髮" },
-                    { value: "floor-length hair", label: "及地長髮" },
-
-                    // --- 綁髮 (馬尾/雙馬尾/丸子) ---
-                    { value: "ponytail", label: "馬尾" },
-                    { value: "high ponytail", label: "高馬尾" },
-                    { value: "side ponytail", label: "側馬尾" },
-                    { value: "short ponytail", label: "短馬尾" },
-                    { value: "twintails", label: "雙馬尾" },
-                    { value: "low twintails", label: "低雙馬尾" },
-                    { value: "short twintails", label: "短雙馬尾" },
-                    { value: "hair bun", label: "丸子頭" },
-                    { value: "single hair bun", label: "單丸子" },
-                    { value: "double bun", label: "雙丸子" },
-                    { value: "braided bun", label: "編織丸子頭" },
-                    { value: "updo", label: "盤髮" },
-
-                    // --- 辮子 ---
-                    { value: "braid", label: "單辮子" },
-                    { value: "twin braids", label: "雙辮子" },
-                    { value: "side braid", label: "側辮" },
-                    { value: "french braid", label: "法式辮" },
-                    { value: "crown braid", label: "盤髮辮" },
-
-                    // --- 剪裁與造型 ---
-                    { value: "bob cut", label: "鮑伯頭" },
-                    { value: "hime cut", label: "公主切" },
-                    { value: "pixie cut", label: "精靈短髮" },
-                    { value: "bowl cut", label: "鍋蓋頭" },
-                    { value: "layered hair", label: "層次剪" },
-                    { value: "blunt ends", label: "齊髮尾" },
-
-                    // --- 髮質與狀態 (直/捲/亂) ---
-                    { value: "straight hair", label: "直髮" },
-                    { value: "curly hair", label: "捲髮" },
-                    { value: "wavy hair", label: "波浪捲" },
-                    { value: "drill hair", label: "鑽頭捲" },
-                    { value: "spiky hair", label: "刺蝟頭" },
-                    { value: "messy hair", label: "凌亂髮" },
-                    { value: "bed head", label: "剛睡醒頭" },
-
-                    // --- 瀏海與額頭 ---
-                    { value: "bangs", label: "瀏海" },
-                    { value: "blunt bangs", label: "齊瀏海" },
-                    { value: "swept bangs", label: "旁分瀏海" },
-                    { value: "crossed bangs", label: "交叉瀏海" },
-                    { value: "hair between eyes", label: "眼間髮" },
-                    { value: "forehead", label: "露額頭" },
-
-                    // --- 呆毛與特殊特徵 ---
-                    { value: "ahoge", label: "呆毛" },
-                    { value: "antenna hair", label: "觸角呆毛" },
-                    { value: "sidelocks", label: "鬢角" },
-                    { value: "hair intake", label: "收束髮" },
-                    { value: "hair over one eye", label: "單眼遮蓋" },
-                    { value: "hair over eyes", label: "遮眼(H)" },
-                    { value: "hair wings", label: "髮翼" },
-
-                    // --- 一般髮色 ---
-                    { value: "black hair", label: "黑髮" },
-                    { value: "brown hair", label: "棕髮" },
-                    { value: "light brown hair", label: "淺棕髮" },
-                    { value: "blonde hair", label: "金髮" },
-                    { value: "platinum blonde hair", label: "白金髮" },
-                    { value: "silver hair", label: "銀髮" },
-                    { value: "white hair", label: "白髮" },
-                    { value: "grey hair", label: "灰髮" },
-                    { value: "red hair", label: "紅髮" },
-                    { value: "ginger hair", label: "橘紅髮" },
-
-                    // --- 特殊髮色 ---
-                    { value: "orange hair", label: "橘髮" },
-                    { value: "pink hair", label: "粉髮" },
-                    { value: "purple hair", label: "紫髮" },
-                    { value: "lavender hair", label: "薰衣草紫" },
-                    { value: "blue hair", label: "藍髮" },
-                    { value: "light blue hair", label: "淺藍髮" },
-                    { value: "aqua hair", label: "水藍髮" },
-                    { value: "green hair", label: "綠髮" },
-
-                    // --- 染髮效果 ---
-                    { value: "gradient hair", label: "漸層髮色" },
-                    { value: "multicolored hair", label: "多彩髮色" },
-                    { value: "two-tone hair", label: "雙色髮" },
-                    { value: "streaked hair", label: "挑染" },
-                    { value: "rainbow hair", label: "彩虹髮" },
-
-                    // --- 物理與材質 ---
-                    { value: "floating hair", label: "漂浮髮" },
-                    { value: "wet hair", label: "濕髮" },
-                    { value: "shiny hair", label: "光澤髮" }
+                groups: [
+                    {
+                        name: "髮長",
+                        tags: [
+                            { value: "short hair", label: "短髮" },
+                            { value: "medium hair", label: "中長髮" },
+                            { value: "long hair", label: "長髮" },
+                            { value: "very long hair", label: "超長髮" },
+                            { value: "absurdly long hair", label: "極長髮" },
+                            { value: "floor-length hair", label: "及地長髮" }
+                        ]
+                    },
+                    {
+                        name: "綁髮",
+                        tags: [
+                            { value: "ponytail", label: "馬尾" },
+                            { value: "high ponytail", label: "高馬尾" },
+                            { value: "side ponytail", label: "側馬尾" },
+                            { value: "short ponytail", label: "短馬尾" },
+                            { value: "twintails", label: "雙馬尾" },
+                            { value: "low twintails", label: "低雙馬尾" },
+                            { value: "short twintails", label: "短雙馬尾" },
+                            { value: "hair bun", label: "丸子頭" },
+                            { value: "single hair bun", label: "單丸子" },
+                            { value: "double bun", label: "雙丸子" },
+                            { value: "braided bun", label: "編織丸子頭" },
+                            { value: "updo", label: "盤髮" }
+                        ]
+                    },
+                    {
+                        name: "辮子",
+                        tags: [
+                            { value: "braid", label: "單辮子" },
+                            { value: "twin braids", label: "雙辮子" },
+                            { value: "side braid", label: "側辮" },
+                            { value: "french braid", label: "法式辮" },
+                            { value: "crown braid", label: "盤髮辮" }
+                        ]
+                    },
+                    {
+                        name: "剪裁與造型",
+                        tags: [
+                            { value: "bob cut", label: "鮑伯頭" },
+                            { value: "hime cut", label: "公主切" },
+                            { value: "pixie cut", label: "精靈短髮" },
+                            { value: "bowl cut", label: "鍋蓋頭" },
+                            { value: "layered hair", label: "層次剪" },
+                            { value: "blunt ends", label: "齊髮尾" }
+                        ]
+                    },
+                    {
+                        name: "髮質與狀態",
+                        tags: [
+                            { value: "straight hair", label: "直髮" },
+                            { value: "curly hair", label: "捲髮" },
+                            { value: "wavy hair", label: "波浪捲" },
+                            { value: "drill hair", label: "鑽頭捲" },
+                            { value: "spiky hair", label: "刺蝟頭" },
+                            { value: "messy hair", label: "凌亂髮" },
+                            { value: "bed head", label: "剛睡醒頭" }
+                        ]
+                    },
+                    {
+                        name: "瀏海與額頭",
+                        tags: [
+                            { value: "bangs", label: "瀏海" },
+                            { value: "blunt bangs", label: "齊瀏海" },
+                            { value: "swept bangs", label: "旁分瀏海" },
+                            { value: "crossed bangs", label: "交叉瀏海" },
+                            { value: "hair between eyes", label: "眼間髮" },
+                            { value: "forehead", label: "露額頭" }
+                        ]
+                    },
+                    {
+                        name: "呆毛與特殊",
+                        tags: [
+                            { value: "ahoge", label: "呆毛" },
+                            { value: "antenna hair", label: "觸角呆毛" },
+                            { value: "sidelocks", label: "鬢角" },
+                            { value: "hair intake", label: "收束髮" },
+                            { value: "hair over one eye", label: "單眼遮蓋" },
+                            { value: "hair over eyes", label: "遮眼(H)" },
+                            { value: "hair wings", label: "髮翼" }
+                        ]
+                    },
+                    {
+                        name: "一般髮色",
+                        tags: [
+                            { value: "black hair", label: "黑髮" },
+                            { value: "brown hair", label: "棕髮" },
+                            { value: "light brown hair", label: "淺棕髮" },
+                            { value: "blonde hair", label: "金髮" },
+                            { value: "platinum blonde hair", label: "白金髮" },
+                            { value: "silver hair", label: "銀髮" },
+                            { value: "white hair", label: "白髮" },
+                            { value: "grey hair", label: "灰髮" },
+                            { value: "red hair", label: "紅髮" },
+                            { value: "ginger hair", label: "橘紅髮" }
+                        ]
+                    },
+                    {
+                        name: "特殊髮色",
+                        tags: [
+                            { value: "orange hair", label: "橘髮" },
+                            { value: "pink hair", label: "粉髮" },
+                            { value: "purple hair", label: "紫髮" },
+                            { value: "lavender hair", label: "薰衣草紫" },
+                            { value: "blue hair", label: "藍髮" },
+                            { value: "light blue hair", label: "淺藍髮" },
+                            { value: "aqua hair", label: "水藍髮" },
+                            { value: "green hair", label: "綠髮" }
+                        ]
+                    },
+                    {
+                        name: "染髮效果",
+                        tags: [
+                            { value: "gradient hair", label: "漸層髮色" },
+                            { value: "multicolored hair", label: "多彩髮色" },
+                            { value: "two-tone hair", label: "雙色髮" },
+                            { value: "streaked hair", label: "挑染" },
+                            { value: "rainbow hair", label: "彩虹髮" }
+                        ]
+                    },
+                    {
+                        name: "物理與材質",
+                        tags: [
+                            { value: "floating hair", label: "漂浮髮" },
+                            { value: "wet hair", label: "濕髮" },
+                            { value: "shiny hair", label: "光澤髮" }
+                        ]
+                    }
                 ]
             },
             body: {
                 name: "身材與特徵",
-                tags: [
-                    // --- 整體體型 ---
-                    { value: "slim", label: "苗條" },
-                    { value: "skinny", label: "骨感" },
-                    { value: "petite", label: "嬌小" },
-                    { value: "tall", label: "高挑" },
-                    { value: "giantess", label: "巨大娘" },
-                    { value: "fit", label: "結實" },
-                    { value: "athletic", label: "運動型" },
-                    { value: "muscular", label: "肌肉" },
-                    { value: "toned", label: "線條分明" },
-                    { value: "curvy", label: "S曲線" },
-                    { value: "voluptuous", label: "肉感" },
-                    { value: "plump", label: "豐腴" },
-                    { value: "chubby", label: "微胖" },
-                    { value: "thick", label: "厚實/肉感" },
-                    { value: "soft body", label: "柔軟身軀" },
-                    { value: "hourglass figure", label: "沙漏型身材" },
-                    { value: "mature body", label: "成熟身軀" },
-
-                    // --- 胸部 ---
-                    { value: "flat chest", label: "貧乳" },
-                    { value: "small breasts", label: "小胸" },
-                    { value: "medium breasts", label: "中胸" },
-                    { value: "large breasts", label: "大胸" },
-                    { value: "huge breasts", label: "巨乳" },
-                    { value: "gigantic breasts", label: "爆乳" },
-                    { value: "cleavage", label: "乳溝" },
-                    { value: "sideboob", label: "側乳" },
-                    { value: "underboob", label: "南半球" },
-                    { value: "bouncing breasts", label: "晃動的胸部" },
-
-                    // --- 皮膚與膚色 ---
-                    { value: "pale skin", label: "蒼白肌" },
-                    { value: "fair skin", label: "白皙" },
-                    { value: "tanned skin", label: "小麥色" },
-                    { value: "dark skin", label: "黑肉" },
-                    { value: "blue skin", label: "藍皮膚" },
-                    { value: "red skin", label: "紅皮膚" },
-                    { value: "green skin", label: "綠皮膚" },
-                    { value: "purple skin", label: "紫皮膚" },
-                    { value: "wet skin", label: "濕皮膚" },
-                    { value: "sweat", label: "流汗" },
-                    { value: "glistening skin", label: "閃光肌" },
-                    { value: "oiled skin", label: "油亮" },
-                    { value: "glossy skin", label: "光澤肌" },
-                    { value: "shiny skin", label: "亮皮" },
-
-                    // --- 身體部位 ---
-                    { value: "abs", label: "腹肌" },
-                    { value: "navel", label: "肚臍" },
-                    { value: "collarbone", label: "鎖骨" },
-                    { value: "bare shoulders", label: "露肩" },
-                    { value: "bare back", label: "露背" },
-                    { value: "armpits", label: "腋下" },
-                    { value: "wide hips", label: "寬臀" },
-                    { value: "thick thighs", label: "蜜大腿" },
-                    { value: "thigh gap", label: "大腿縫" },
-                    { value: "long legs", label: "長腿" },
-                    { value: "feet", label: "腳" },
-                    { value: "soles", label: "腳底" },
-                    { value: "toes", label: "腳趾" },
-
-                    // --- 臉部特徵、化妝與指甲 ---
-                    { value: "pointy ears", label: "尖耳" },
-                    { value: "fangs", label: "虎牙/尖牙" },
-                    { value: "shark teeth", label: "鯊魚牙" },
-                    { value: "makeup", label: "化妝" },
-                    { value: "eyeshadow", label: "眼影" },
-                    { value: "eyeliner", label: "眼線" },
-                    { value: "lipstick", label: "口紅" },
-                    { value: "nail polish", label: "指甲油" },
-                    { value: "long fingernails", label: "長指甲" },
-                    { value: "sharp fingernails", label: "尖指甲" },
-
-                    // --- 印記、曬痕與刺青 ---
-                    { value: "beauty mark", label: "美人痣" },
-                    { value: "mole under eye", label: "淚痣" },
-                    { value: "mole on breast", label: "胸痣" },
-                    { value: "mole on thigh", label: "腿痣" },
-                    { value: "freckles", label: "雀斑" },
-                    { value: "scar", label: "傷疤" },
-                    { value: "tanlines", label: "日曬痕" },
-                    { value: "bikini tan", label: "比基尼曬痕" },
-                    { value: "sock marks", label: "襪痕" },
-                    { value: "tattoo", label: "刺青" },
-                    { value: "tribal tattoo", label: "圖騰刺青" },
-                    { value: "womb tattoo", label: "子宮紋" },
-
-                    // --- 穿環 ---
-                    { value: "piercing", label: "穿環" },
-                    { value: "ear piercing", label: "耳環" },
-                    { value: "navel piercing", label: "肚臍環" },
-                    { value: "tongue piercing", label: "舌環" },
-                    { value: "nipple piercing", label: "乳環" },
-                    { value: "nose piercing", label: "鼻環" }
+                groups: [
+                    {
+                        name: "整體體型",
+                        tags: [
+                            { value: "slim", label: "苗條" },
+                            { value: "skinny", label: "骨感" },
+                            { value: "petite", label: "嬌小" },
+                            { value: "tall", label: "高挑" },
+                            { value: "giantess", label: "巨大娘" },
+                            { value: "fit", label: "結實" },
+                            { value: "athletic", label: "運動型" },
+                            { value: "muscular", label: "肌肉" },
+                            { value: "toned", label: "線條分明" },
+                            { value: "curvy", label: "S曲線" },
+                            { value: "voluptuous", label: "肉感" },
+                            { value: "plump", label: "豐腴" },
+                            { value: "chubby", label: "微胖" },
+                            { value: "thick", label: "厚實/肉感" },
+                            { value: "soft body", label: "柔軟身軀" },
+                            { value: "hourglass figure", label: "沙漏型身材" },
+                            { value: "mature body", label: "成熟身軀" }
+                        ]
+                    },
+                    {
+                        name: "胸部",
+                        tags: [
+                            { value: "flat chest", label: "貧乳" },
+                            { value: "small breasts", label: "小胸" },
+                            { value: "medium breasts", label: "中胸" },
+                            { value: "large breasts", label: "大胸" },
+                            { value: "huge breasts", label: "巨乳" },
+                            { value: "gigantic breasts", label: "爆乳" },
+                            { value: "cleavage", label: "乳溝" },
+                            { value: "sideboob", label: "側乳" },
+                            { value: "underboob", label: "南半球" },
+                            { value: "bouncing breasts", label: "晃動的胸部" }
+                        ]
+                    },
+                    {
+                        name: "皮膚與膚色",
+                        tags: [
+                            { value: "pale skin", label: "蒼白肌" },
+                            { value: "fair skin", label: "白皙" },
+                            { value: "tanned skin", label: "小麥色" },
+                            { value: "dark skin", label: "黑肉" },
+                            { value: "blue skin", label: "藍皮膚" },
+                            { value: "red skin", label: "紅皮膚" },
+                            { value: "green skin", label: "綠皮膚" },
+                            { value: "purple skin", label: "紫皮膚" },
+                            { value: "wet skin", label: "濕皮膚" },
+                            { value: "sweat", label: "流汗" },
+                            { value: "glistening skin", label: "閃光肌" },
+                            { value: "oiled skin", label: "油亮" },
+                            { value: "glossy skin", label: "光澤肌" },
+                            { value: "shiny skin", label: "亮皮" }
+                        ]
+                    },
+                    {
+                        name: "身體部位",
+                        tags: [
+                            { value: "abs", label: "腹肌" },
+                            { value: "navel", label: "肚臍" },
+                            { value: "collarbone", label: "鎖骨" },
+                            { value: "bare shoulders", label: "露肩" },
+                            { value: "bare back", label: "露背" },
+                            { value: "armpits", label: "腋下" },
+                            { value: "wide hips", label: "寬臀" },
+                            { value: "thick thighs", label: "蜜大腿" },
+                            { value: "thigh gap", label: "大腿縫" },
+                            { value: "long legs", label: "長腿" },
+                            { value: "feet", label: "腳" },
+                            { value: "soles", label: "腳底" },
+                            { value: "toes", label: "腳趾" }
+                        ]
+                    },
+                    {
+                        name: "臉部與指甲",
+                        tags: [
+                            { value: "pointy ears", label: "尖耳" },
+                            { value: "fangs", label: "虎牙/尖牙" },
+                            { value: "shark teeth", label: "鯊魚牙" },
+                            { value: "makeup", label: "化妝" },
+                            { value: "eyeshadow", label: "眼影" },
+                            { value: "eyeliner", label: "眼線" },
+                            { value: "lipstick", label: "口紅" },
+                            { value: "nail polish", label: "指甲油" },
+                            { value: "long fingernails", label: "長指甲" },
+                            { value: "sharp fingernails", label: "尖指甲" }
+                        ]
+                    },
+                    {
+                        name: "印記與刺青",
+                        tags: [
+                            { value: "beauty mark", label: "美人痣" },
+                            { value: "mole under eye", label: "淚痣" },
+                            { value: "mole on breast", label: "胸痣" },
+                            { value: "mole on thigh", label: "腿痣" },
+                            { value: "freckles", label: "雀斑" },
+                            { value: "scar", label: "傷疤" },
+                            { value: "tanlines", label: "日曬痕" },
+                            { value: "bikini tan", label: "比基尼曬痕" },
+                            { value: "sock marks", label: "襪痕" },
+                            { value: "tattoo", label: "刺青" },
+                            { value: "tribal tattoo", label: "圖騰刺青" },
+                            { value: "womb tattoo", label: "子宮紋" }
+                        ]
+                    },
+                    {
+                        name: "穿環",
+                        tags: [
+                            { value: "piercing", label: "穿環" },
+                            { value: "ear piercing", label: "耳環" },
+                            { value: "navel piercing", label: "肚臍環" },
+                            { value: "tongue piercing", label: "舌環" },
+                            { value: "nipple piercing", label: "乳環" },
+                            { value: "nose piercing", label: "鼻環" }
+                        ]
+                    }
                 ]
             },
             r18: {
                 name: "瑟瑟",
-                tags: [
-                    // --- 基礎狀態與修正 ---
-                    { value: "nsfw", label: "NSFW (核心)" },
-                    { value: "uncensored", label: "無修/無碼" },
-                    { value: "naked", label: "全裸" },
-                    { value: "nude", label: "裸體" },
-                    { value: "topless", label: "上空/露胸" },
-                    { value: "bottomless", label: "下空/無內褲" },
-                    { value: "disheveled hair", label: "頭髮凌亂" },
-                    { value: "sweaty", label: "大汗淋漓" },
-
-                    // --- 私密部位特寫 (器官) ---
-                    { value: "penis", label: "陰莖" },
-                    { value: "erection", label: "勃起" },
-                    { value: "glans", label: "龜頭" },
-                    { value: "veiny penis", label: "青筋老二" },
-                    { value: "pussy", label: "小穴" },
-                    { value: "clitoris", label: "陰蒂" },
-                    { value: "cameltoe", label: "駱駝蹄" },
-                    { value: "anus", label: "肛門" },
-                    { value: "nipples", label: "乳頭" },
-                    { value: "erect nipples", label: "乳頭硬挺" },
-                    { value: "areola", label: "乳暈" },
-                    { value: "pubic hair", label: "陰毛" },
-                    { value: "shaven", label: "白虎/無毛" },
-
-                    // --- 前戲與愛撫 ---
-                    { value: "kissing", label: "親吻" },
-                    { value: "french kiss", label: "舌吻" },
-                    { value: "breast sucking", label: "吸奶" },
-                    { value: "fingering", label: "指交" },
-                    { value: "handjob", label: "手交" },
-                    { value: "footjob", label: "足交" },
-                    { value: "paizuri", label: "乳交" },
-                    { value: "sumata", label: "素股/摩擦" },
-                    { value: "grinding", label: "磨蹭" },
-                    { value: "grope", label: "揉胸/摸索" },
-                    { value: "spread pussy", label: "張開小穴" },
-                    { value: "spread anus", label: "張開屁股" },
-                    { value: "simulated fellatio", label: "模擬口交(物體)" },
-                    { value: "simulated handjob", label: "模擬手交(物體)" },
-                    { value: "simulated paizuri", label: "模擬乳交(物體)" },
-                    { value: "simulated footjob", label: "模擬足交(物體)" },
-                    { value: "male masturbation", label: "男性自慰" },
-                    { value: "female masturbation", label: "女性自慰" },
-                    { value: "clothed masturbation", label: "穿衣自慰" },
-					{ value: "masturbation through clothes", label: "隔著衣服自慰" },
-                    { value: "pillow humping", label: "枕頭摩擦" },
-                    { value: "table humping", label: "桌腳摩擦" },
-
-                    // --- 口交系 ---
-                    { value: "fellatio", label: "口交(幫男)" },
-                    { value: "cunnilingus", label: "舔穴(幫女)" },
-                    { value: "deepthroat", label: "深喉嚨" },
-                    { value: "face fucking", label: "口交(動態)" },
-                    { value: "irrumatio", label: "口交(強制/深喉)" },
-                    { value: "open mouth", label: "張嘴等待" },
-
-                    // --- 性交體位 (1v1) ---
-                    { value: "sex", label: "性交" },
-                    { value: "vaginal", label: "陰道性交" },
-                    { value: "anal", label: "肛交" },
-                    { value: "missionary", label: "傳教士" },
-                    { value: "doggystyle", label: "狗爬式" },
-                    { value: "cowgirl position", label: "騎乘位" },
-                    { value: "reverse cowgirl", label: "反向騎乘" },
-                    { value: "mating press", label: "抱腿性交(Mating Press)" },
-                    { value: "standing sex", label: "站立性交" },
-                    { value: "lifted by others", label: "抱起來做" },
-                    { value: "spooning", label: "側入/湯匙式" },
-                    { value: "straddling", label: "跨坐" },
-                    { value: "legs over head", label: "M字開腳(抬腿)" },
-                    { value: "69", label: "69式" },
-                    { value: "from behind", label: "後入式" },
-
-                    // --- 自慰與道具 ---
-                    { value: "masturbation", label: "自慰" },
-                    { value: "fingering self", label: "手指自慰" },
-                    { value: "sex toys", label: "情趣玩具" },
-                    { value: "dildo", label: "假陽具" },
-                    { value: "vibrator", label: "跳蛋/按摩棒" },
-                    { value: "condom", label: "保險套" },
-                    { value: "condom in mouth", label: "嘴含保險套" },
-
-                    // --- 玩法與調教 (BDSM) ---
-                    { value: "bondage", label: "綑綁" },
-                    { value: "shibari", label: "日式龜甲縛" },
-                    { value: "rope", label: "繩子" },
-                    { value: "bdsm", label: "BDSM" },
-                    { value: "spanking", label: "打屁股" },
-                    { value: "choking", label: "勒頸/掐脖" },
-                    { value: "gag", label: "口球" },
-                    { value: "blindfold", label: "蒙眼" },
-                    { value: "suspended", label: "懸吊" },
-                    { value: "leash", label: "牽繩/狗鍊" },
-                    { value: "collar", label: "項圈" },
-                    { value: "tentacles", label: "觸手" },
-                    { value: "femdom", label: "女帝/女攻" },
-                    { value: "public sex", label: "野外/公眾性交" },
-                    { value: "exhibitionism", label: "露出/暴露" },
-
-                    // --- 射精與液體 ---
-                    { value: "cum", label: "精液" },
-                    { value: "creampie", label: "內射" },
-                    { value: "cum in pussy", label: "陰道內射" },
-                    { value: "cum in mouth", label: "口內射精" },
-                    { value: "cum on body", label: "身體射精" },
-                    { value: "cum on face", label: "顏射" },
-                    { value: "cum on breasts", label: "射在胸部" },
-                    { value: "cum drip", label: "精液流出" },
-                    { value: "after sex", label: "事後" },
-                    { value: "covered in cum", label: "全身精液" },
-                    { value: "squirting", label: "潮吹" },
-                    { value: "pussy juice", label: "愛液" },
-                    { value: "saliva", label: "唾液" },
-                    { value: "saliva trail", label: "唾液拉絲" },
-
-                    // --- 特殊視角/透視 ---
-                    { value: "x-ray", label: "X光透視" },
-                    { value: "cross-section", label: "斷面圖" },
-                    { value: "internal view", label: "體內視角" },
-                    { value: "pov", label: "第一人稱視角" },
-                    { value: "looking back", label: "回頭看" },
-
-                    // --- 衣服狀態 ---
-                    { value: "lifted skirt", label: "掀裙子" },
-                    { value: "panties aside", label: "撥開內褲" },
-                    { value: "pulling down panties", label: "脫內褲" },
-                    { value: "half-removed clothes", label: "衣衫半解" },
-                    { value: "clothes lift", label: "掀起衣服" }
+                groups: [
+                    {
+                        name: "基礎狀態",
+                        tags: [
+                            { value: "nsfw", label: "NSFW (核心)" },
+                            { value: "uncensored", label: "無修/無碼" },
+                            { value: "naked", label: "全裸" },
+                            { value: "nude", label: "裸體" },
+                            { value: "topless", label: "上空/露胸" },
+                            { value: "bottomless", label: "下空/無內褲" },
+                            { value: "disheveled hair", label: "頭髮凌亂" },
+                            { value: "sweaty", label: "大汗淋漓" }
+                        ]
+                    },
+                    {
+                        name: "器官特寫",
+                        tags: [
+                            { value: "penis", label: "陰莖" },
+                            { value: "erection", label: "勃起" },
+                            { value: "glans", label: "龜頭" },
+                            { value: "veiny penis", label: "青筋老二" },
+                            { value: "pussy", label: "小穴" },
+                            { value: "clitoris", label: "陰蒂" },
+                            { value: "cameltoe", label: "駱駝蹄" },
+                            { value: "anus", label: "肛門" },
+                            { value: "nipples", label: "乳頭" },
+                            { value: "erect nipples", label: "乳頭硬挺" },
+                            { value: "areola", label: "乳暈" },
+                            { value: "pubic hair", label: "陰毛" },
+                            { value: "shaven", label: "白虎/無毛" }
+                        ]
+                    },
+                    {
+                        name: "前戲與愛撫",
+                        tags: [
+                            { value: "kissing", label: "親吻" },
+                            { value: "french kiss", label: "舌吻" },
+                            { value: "breast sucking", label: "吸奶" },
+                            { value: "fingering", label: "指交" },
+                            { value: "handjob", label: "手交" },
+                            { value: "footjob", label: "足交" },
+                            { value: "paizuri", label: "乳交" },
+                            { value: "sumata", label: "素股/摩擦" },
+                            { value: "grinding", label: "磨蹭" },
+                            { value: "grope", label: "揉胸/摸索" },
+                            { value: "spread pussy", label: "張開小穴" },
+                            { value: "spread anus", label: "張開屁股" },
+                            { value: "simulated fellatio", label: "模擬口交(物體)" },
+                            { value: "simulated handjob", label: "模擬手交(物體)" },
+                            { value: "simulated paizuri", label: "模擬乳交(物體)" },
+                            { value: "simulated footjob", label: "模擬足交(物體)" }
+                        ]
+                    },
+                    {
+                        name: "口交系",
+                        tags: [
+                            { value: "fellatio", label: "口交(幫男)" },
+                            { value: "cunnilingus", label: "舔穴(幫女)" },
+                            { value: "deepthroat", label: "深喉嚨" },
+                            { value: "face fucking", label: "口交(動態)" },
+                            { value: "irrumatio", label: "口交(強制/深喉)" },
+                            { value: "open mouth", label: "張嘴等待" }
+                        ]
+                    },
+                    {
+                        name: "性交體位",
+                        tags: [
+                            { value: "sex", label: "性交" },
+                            { value: "vaginal", label: "陰道性交" },
+                            { value: "anal", label: "肛交" },
+                            { value: "missionary", label: "傳教士" },
+                            { value: "doggystyle", label: "狗爬式" },
+                            { value: "cowgirl position", label: "騎乘位" },
+                            { value: "reverse cowgirl", label: "反向騎乘" },
+                            { value: "mating press", label: "抱腿性交(Mating Press)" },
+                            { value: "standing sex", label: "站立性交" },
+                            { value: "lifted by others", label: "抱起來做" },
+                            { value: "spooning", label: "側入/湯匙式" },
+                            { value: "straddling", label: "跨坐" },
+                            { value: "legs over head", label: "M字開腳(抬腿)" },
+                            { value: "69", label: "69式" },
+                            { value: "from behind", label: "後入式" }
+                        ]
+                    },
+                    {
+                        name: "自慰與道具",
+                        tags: [
+                            { value: "masturbation", label: "自慰" },
+                            { value: "fingering self", label: "手指自慰" },
+                            { value: "male masturbation", label: "男性自慰" },
+                            { value: "female masturbation", label: "女性自慰" },
+                            { value: "clothed masturbation", label: "穿衣自慰" },
+                            { value: "sex toys", label: "情趣玩具" },
+                            { value: "dildo", label: "假陽具" },
+                            { value: "vibrator", label: "跳蛋/按摩棒" },
+                            { value: "condom", label: "保險套" },
+                            { value: "condom in mouth", label: "嘴含保險套" },
+                            { value: "pillow humping", label: "枕頭摩擦" },
+                            { value: "table humping", label: "桌腳摩擦" }
+                        ]
+                    },
+                    {
+                        name: "玩法與調教",
+                        tags: [
+                            { value: "bondage", label: "綑綁" },
+                            { value: "shibari", label: "日式龜甲縛" },
+                            { value: "rope", label: "繩子" },
+                            { value: "bdsm", label: "BDSM" },
+                            { value: "spanking", label: "打屁股" },
+                            { value: "choking", label: "勒頸/掐脖" },
+                            { value: "gag", label: "口球" },
+                            { value: "blindfold", label: "蒙眼" },
+                            { value: "suspended", label: "懸吊" },
+                            { value: "leash", label: "牽繩/狗鍊" },
+                            { value: "collar", label: "項圈" },
+                            { value: "tentacles", label: "觸手" },
+                            { value: "femdom", label: "女帝/女攻" },
+                            { value: "public sex", label: "野外/公眾性交" },
+                            { value: "exhibitionism", label: "露出/暴露" }
+                        ]
+                    },
+                    {
+                        name: "射精與液體",
+                        tags: [
+                            { value: "cum", label: "精液" },
+                            { value: "creampie", label: "內射" },
+                            { value: "cum in pussy", label: "陰道內射" },
+                            { value: "cum in mouth", label: "口內射精" },
+                            { value: "cum on body", label: "身體射精" },
+                            { value: "cum on face", label: "顏射" },
+                            { value: "cum on breasts", label: "射在胸部" },
+                            { value: "cum drip", label: "精液流出" },
+                            { value: "after sex", label: "事後" },
+                            { value: "covered in cum", label: "全身精液" },
+                            { value: "squirting", label: "潮吹" },
+                            { value: "pussy juice", label: "愛液" },
+                            { value: "saliva", label: "唾液" },
+                            { value: "saliva trail", label: "唾液拉絲" }
+                        ]
+                    },
+                    {
+                        name: "特殊視角",
+                        tags: [
+                            { value: "x-ray", label: "X光透視" },
+                            { value: "cross-section", label: "斷面圖" },
+                            { value: "internal view", label: "體內視角" },
+                            { value: "pov", label: "第一人稱視角" },
+                            { value: "looking back", label: "回頭看" }
+                        ]
+                    },
+                    {
+                        name: "衣服狀態",
+                        tags: [
+                            { value: "lifted skirt", label: "掀裙子" },
+                            { value: "panties aside", label: "撥開內褲" },
+                            { value: "pulling down panties", label: "脫內褲" },
+                            { value: "half-removed clothes", label: "衣衫半解" },
+                            { value: "clothes lift", label: "掀起衣服" }
+                        ]
+                    }
                 ]
             },
             action: {
                 name: "動作",
-                tags: [
-                    // --- 基礎姿勢 (靜態) ---
-                    { value: "standing", label: "站立" },
-                    { value: "sitting", label: "坐著" },
-                    { value: "kneeling", label: "跪著" },
-                    { value: "squatting", label: "蹲著" },
-                    { value: "lying", label: "躺著" },
-                    { value: "on back", label: "仰臥" },
-                    { value: "on stomach", label: "趴著" },
-                    { value: "on side", label: "側臥" },
-                    { value: "curled up", label: "蜷縮" },
-                    { value: "leaning", label: "倚靠" },
-                    { value: "leaning forward", label: "前傾" },
-                    { value: "leaning back", label: "後仰" },
-                    { value: "all fours", label: "四肢著地" },
-                    { value: "w-sitting", label: "鴨子坐" },
-                    { value: "seiza", label: "正坐" },
-                    { value: "spread legs", label: "張腿" },
-                    { value: "m-shaped legs", label: "M字腿" },
-                    { value: "crossing legs", label: "翹腳" },
-                    { value: "legs up", label: "抬腿" },
-
-                    // --- 動態與移動 ---
-                    { value: "walking", label: "走路" },
-                    { value: "running", label: "跑步" },
-                    { value: "jumping", label: "跳躍" },
-                    { value: "flying", label: "飛行" },
-                    { value: "floating", label: "漂浮" },
-                    { value: "falling", label: "墜落" },
-                    { value: "crawling", label: "爬行" },
-                    { value: "dancing", label: "跳舞" },
-                    { value: "swimming", label: "游泳" },
-                    { value: "stretching", label: "伸展" },
-                    { value: "bending over", label: "彎腰" },
-
-                    // --- 手部與上肢動作 ---
-                    { value: "arms up", label: "舉手" },
-                    { value: "hands on hips", label: "插腰" },
-                    { value: "crossing arms", label: "雙手抱胸" },
-                    { value: "reaching", label: "伸手" },
-                    { value: "waving", label: "揮手" },
-                    { value: "salute", label: "敬禮" },
-                    { value: "thumbs up", label: "讚" },
-                    { value: "peace sign", label: "勝利手勢" },
-                    { value: "heart hands", label: "愛心手勢" },
-                    { value: "finger gun", label: "手指槍" },
-                    { value: "pointing", label: "指著" },
-                    { value: "arms behind back", label: "手背在身後" },
-                    { value: "hands in pockets", label: "手插口袋" },
-                    { value: "cat pose", label: "貓爪手勢" },
-
-                    // --- 觸碰與遮擋 ---
-                    { value: "hand on face", label: "手托臉" },
-                    { value: "hand on own chin", label: "手摸下巴" },
-                    { value: "covering face", label: "遮臉" },
-                    { value: "covering breasts", label: "遮胸" },
-                    { value: "covering crotch", label: "遮襠" },
-                    { value: "finger to mouth", label: "手指放嘴邊" },
-                    { value: "shushing", label: "噓手勢" },
-                    { value: "adjusting hair", label: "整理頭髮" },
-                    { value: "hair tuck", label: "撩頭髮" },
-                    { value: "adjusting clothes", label: "整理衣服" },
-                    { value: "adjusting eyewear", label: "推眼鏡" },
-                    { value: "wiping tears", label: "擦眼淚" },
-
-                    // --- 戰鬥與魔法 ---
-                    { value: "fighting", label: "戰鬥" },
-                    { value: "kicking", label: "踢" },
-                    { value: "punching", label: "拳擊" },
-                    { value: "casting spell", label: "施法" },
-                    { value: "shooting", label: "射擊" },
-                    { value: "aiming", label: "瞄準" },
-                    { value: "holding weapon", label: "拿武器" },
-
-                    // --- 生活與日常 ---
-                    { value: "holding object", label: "拿著東西" },
-                    { value: "eating", label: "吃" },
-                    { value: "drinking", label: "喝" },
-                    { value: "reading", label: "閱讀" },
-                    { value: "sleeping", label: "睡覺" },
-                    { value: "cooking", label: "做飯" },
-                    { value: "cleaning", label: "打掃" },
-                    { value: "selfie", label: "自拍" },
-                    { value: "lifting skirt", label: "掀裙子" },
-                    { value: "undressing", label: "脫衣" },
-
-                    // --- 互動 (多人/親密) ---
-                    { value: "hugging", label: "擁抱" },
-                    { value: "kissing", label: "親吻" },
-                    { value: "holding hands", label: "牽手" },
-                    { value: "carrying", label: "搬運/抱著" },
-                    { value: "princess carry", label: "公主抱" },
-                    { value: "lap pillow", label: "膝枕" },
-                    { value: "sleeping together", label: "共眠" },
-                    { value: "back-to-back", label: "背對背" },
-                    { value: "leaning on each other", label: "互相依靠" },
-                    { value: "headpat", label: "摸頭" },
-
-                    // --- 頭部與視線 ---
-                    { value: "looking back", label: "回頭" },
-                    { value: "looking away", label: "看別處" },
-                    { value: "looking down", label: "低頭" },
-                    { value: "looking up", label: "抬頭" }
+                groups: [
+                    {
+                        name: "基礎姿勢",
+                        tags: [
+                            { value: "standing", label: "站立" },
+                            { value: "sitting", label: "坐著" },
+                            { value: "kneeling", label: "跪著" },
+                            { value: "squatting", label: "蹲著" },
+                            { value: "lying", label: "躺著" },
+                            { value: "on back", label: "仰臥" },
+                            { value: "on stomach", label: "趴著" },
+                            { value: "on side", label: "側臥" },
+                            { value: "curled up", label: "蜷縮" },
+                            { value: "leaning", label: "倚靠" },
+                            { value: "leaning forward", label: "前傾" },
+                            { value: "leaning back", label: "後仰" },
+                            { value: "all fours", label: "四肢著地" },
+                            { value: "w-sitting", label: "鴨子坐" },
+                            { value: "seiza", label: "正坐" },
+                            { value: "spread legs", label: "張腿" },
+                            { value: "m-shaped legs", label: "M字腿" },
+                            { value: "crossing legs", label: "翹腳" },
+                            { value: "legs up", label: "抬腿" }
+                        ]
+                    },
+                    {
+                        name: "動態與移動",
+                        tags: [
+                            { value: "walking", label: "走路" },
+                            { value: "running", label: "跑步" },
+                            { value: "jumping", label: "跳躍" },
+                            { value: "flying", label: "飛行" },
+                            { value: "floating", label: "漂浮" },
+                            { value: "falling", label: "墜落" },
+                            { value: "crawling", label: "爬行" },
+                            { value: "dancing", label: "跳舞" },
+                            { value: "swimming", label: "游泳" },
+                            { value: "stretching", label: "伸展" },
+                            { value: "bending over", label: "彎腰" }
+                        ]
+                    },
+                    {
+                        name: "手部動作",
+                        tags: [
+                            { value: "arms up", label: "舉手" },
+                            { value: "hands on hips", label: "插腰" },
+                            { value: "crossing arms", label: "雙手抱胸" },
+                            { value: "reaching", label: "伸手" },
+                            { value: "waving", label: "揮手" },
+                            { value: "salute", label: "敬禮" },
+                            { value: "thumbs up", label: "讚" },
+                            { value: "peace sign", label: "勝利手勢" },
+                            { value: "heart hands", label: "愛心手勢" },
+                            { value: "finger gun", label: "手指槍" },
+                            { value: "pointing", label: "指著" },
+                            { value: "arms behind back", label: "手背在身後" },
+                            { value: "hands in pockets", label: "手插口袋" },
+                            { value: "cat pose", label: "貓爪手勢" }
+                        ]
+                    },
+                    {
+                        name: "觸碰與遮擋",
+                        tags: [
+                            { value: "hand on face", label: "手托臉" },
+                            { value: "hand on own chin", label: "手摸下巴" },
+                            { value: "covering face", label: "遮臉" },
+                            { value: "covering breasts", label: "遮胸" },
+                            { value: "covering crotch", label: "遮襠" },
+                            { value: "finger to mouth", label: "手指放嘴邊" },
+                            { value: "shushing", label: "噓手勢" },
+                            { value: "adjusting hair", label: "整理頭髮" },
+                            { value: "hair tuck", label: "撩頭髮" },
+                            { value: "adjusting clothes", label: "整理衣服" },
+                            { value: "adjusting eyewear", label: "推眼鏡" },
+                            { value: "wiping tears", label: "擦眼淚" }
+                        ]
+                    },
+                    {
+                        name: "戰鬥與魔法",
+                        tags: [
+                            { value: "fighting", label: "戰鬥" },
+                            { value: "kicking", label: "踢" },
+                            { value: "punching", label: "拳擊" },
+                            { value: "casting spell", label: "施法" },
+                            { value: "shooting", label: "射擊" },
+                            { value: "aiming", label: "瞄準" },
+                            { value: "holding weapon", label: "拿武器" }
+                        ]
+                    },
+                    {
+                        name: "生活與日常",
+                        tags: [
+                            { value: "holding object", label: "拿著東西" },
+                            { value: "eating", label: "吃" },
+                            { value: "drinking", label: "喝" },
+                            { value: "reading", label: "閱讀" },
+                            { value: "sleeping", label: "睡覺" },
+                            { value: "cooking", label: "做飯" },
+                            { value: "cleaning", label: "打掃" },
+                            { value: "selfie", label: "自拍" },
+                            { value: "lifting skirt", label: "掀裙子" },
+                            { value: "undressing", label: "脫衣" }
+                        ]
+                    },
+                    {
+                        name: "互動",
+                        tags: [
+                            { value: "hugging", label: "擁抱" },
+                            { value: "kissing", label: "親吻" },
+                            { value: "holding hands", label: "牽手" },
+                            { value: "carrying", label: "搬運/抱著" },
+                            { value: "princess carry", label: "公主抱" },
+                            { value: "lap pillow", label: "膝枕" },
+                            { value: "sleeping together", label: "共眠" },
+                            { value: "back-to-back", label: "背對背" },
+                            { value: "leaning on each other", label: "互相依靠" },
+                            { value: "headpat", label: "摸頭" }
+                        ]
+                    },
+                    {
+                        name: "頭部與視線",
+                        tags: [
+                            { value: "looking back", label: "回頭" },
+                            { value: "looking away", label: "看別處" },
+                            { value: "looking down", label: "低頭" },
+                            { value: "looking up", label: "抬頭" }
+                        ]
+                    }
                 ]
             },
             expression: {
                 name: "表情",
-                tags: [
-                    // --- 喜悅與自信 ---
-                    { value: "smile", label: "微笑" },
-                    { value: "light smile", label: "淺笑" },
-                    { value: "gentle smile", label: "溫柔笑" },
-                    { value: "grin", label: "露齒笑" },
-                    { value: "laughing", label: "大笑" },
-                    { value: "happy", label: "開心" },
-                    { value: "excited", label: "興奮" },
-                    { value: "confident", label: "自信" },
-                    { value: "smug", label: "得意" },
-                    { value: "proud", label: "驕傲" },
-
-                    // --- 悲傷與痛苦 ---
-                    { value: "sad", label: "難過" },
-                    { value: "crying", label: "哭泣" },
-                    { value: "tears", label: "眼淚" },
-                    { value: "streaming tears", label: "淚流滿面" },
-                    { value: "sobbing", label: "啜泣" },
-                    { value: "pain", label: "痛苦" },
-                    { value: "gloom", label: "陰沉" },
-                    { value: "depressed", label: "沮喪" },
-                    { value: "despair", label: "絕望" },
-
-                    // --- 憤怒與厭惡 ---
-                    { value: "angry", label: "生氣" },
-                    { value: "annoyed", label: "煩躁" },
-                    { value: "frowning", label: "皺眉" },
-                    { value: "serious", label: "嚴肅" },
-                    { value: "disgusted", label: "鄙視/噁心" },
-                    { value: "glaring", label: "怒視" },
-
-                    // --- 恐懼、驚訝與困惑 ---
-                    { value: "scared", label: "害怕" },
-                    { value: "terrified", label: "恐懼" },
-                    { value: "screaming", label: "尖叫" },
-                    { value: "nervous", label: "緊張" },
-                    { value: "panicked", label: "驚慌" },
-                    { value: "surprised", label: "驚訝" },
-                    { value: "confused", label: "困惑" },
-                    { value: "bored", label: "無聊" },
-                    { value: "expressionless", label: "無表情" },
-
-                    // --- 害羞與戀愛 ---
-                    { value: "blush", label: "臉紅" },
-                    { value: "shy", label: "害羞" },
-                    { value: "embarrassed", label: "尷尬" },
-                    { value: "flustered", label: "慌張/不知所措" },
-                    { value: "love struck", label: "戀愛腦/花痴" },
-
-                    // --- 誘惑與特殊狀態 (NSFW) ---
-                    { value: "aroused", label: "興奮(H)" },
-                    { value: "heavy breathing", label: "喘息" },
-                    { value: "seductive smile", label: "誘惑笑" },
-                    { value: "naughty face", label: "調皮/色氣臉" },
-                    { value: "smirk", label: "壞笑" },
-                    { value: "lewd", label: "淫蕩" },
-                    { value: "ahegao", label: "阿嘿顏" },
-                    { value: "orgasm face", label: "高潮臉" },
-                    { value: "yandere", label: "病嬌" },
-                    { value: "crazy", label: "瘋狂" },
-                    { value: "drunk", label: "喝醉" },
-                    { value: "sleepy", label: "想睡" },
-
-                    // --- 嘴部動作 ---
-                    { value: "open mouth", label: "張嘴" },
-                    { value: "closed mouth", label: "閉嘴" },
-                    { value: "parted lips", label: "微張嘴" },
-                    { value: "pout", label: "嘟嘴" },
-                    { value: "tongue", label: "舌頭" },
-                    { value: "tongue out", label: "吐舌" },
-                    { value: "licking lips", label: "舔嘴唇" },
-                    { value: "biting lip", label: "咬嘴唇" },
-                    { value: "saliva", label: "唾液" },
-                    { value: "drooling", label: "流口水" },
-                    { value: "fang", label: "虎牙" },
-
-                    // --- 眼部狀態 ---
-                    { value: "closed eyes", label: "閉眼" },
-                    { value: "half-closed eyes", label: "半閉眼" },
-                    { value: "one eye closed", label: "單眼閉" },
-                    { value: "wink", label: "眨眼" },
-                    { value: "squinting", label: "瞇眼" },
-                    { value: "wide eyes", label: "睜大眼" },
-                    { value: "rolling eyes", label: "翻白眼" },
-                    { value: "cross-eyed", label: "鬥雞眼" },
-                    { value: "jitome", label: "盯視/鄙視眼" },
-                    { value: "tareme", label: "垂眼" },
-                    { value: "tsurime", label: "吊眼" },
-                    { value: "heart-shaped pupils", label: "愛心瞳孔" },
-                    { value: "star-shaped pupils", label: "星星瞳孔" },
-                    { value: "spiral eyes", label: "圈圈眼" },
-                    { value: "glowing eyes", label: "發光眼" },
-                    { value: "empty eyes", label: "無神眼" },
-                    { value: "sanpaku", label: "三白眼" },
-                    { value: "bags under eyes", label: "黑眼圈" }
+                groups: [
+                    {
+                        name: "喜悅與自信",
+                        tags: [
+                            { value: "smile", label: "微笑" },
+                            { value: "light smile", label: "淺笑" },
+                            { value: "gentle smile", label: "溫柔笑" },
+                            { value: "grin", label: "露齒笑" },
+                            { value: "laughing", label: "大笑" },
+                            { value: "happy", label: "開心" },
+                            { value: "excited", label: "興奮" },
+                            { value: "confident", label: "自信" },
+                            { value: "smug", label: "得意" },
+                            { value: "proud", label: "驕傲" }
+                        ]
+                    },
+                    {
+                        name: "悲傷與痛苦",
+                        tags: [
+                            { value: "sad", label: "難過" },
+                            { value: "crying", label: "哭泣" },
+                            { value: "tears", label: "眼淚" },
+                            { value: "streaming tears", label: "淚流滿面" },
+                            { value: "sobbing", label: "啜泣" },
+                            { value: "pain", label: "痛苦" },
+                            { value: "gloom", label: "陰沉" },
+                            { value: "depressed", label: "沮喪" },
+                            { value: "despair", label: "絕望" }
+                        ]
+                    },
+                    {
+                        name: "憤怒與厭惡",
+                        tags: [
+                            { value: "angry", label: "生氣" },
+                            { value: "annoyed", label: "煩躁" },
+                            { value: "frowning", label: "皺眉" },
+                            { value: "serious", label: "嚴肅" },
+                            { value: "disgusted", label: "鄙視/噁心" },
+                            { value: "glaring", label: "怒視" }
+                        ]
+                    },
+                    {
+                        name: "驚恐困惑",
+                        tags: [
+                            { value: "scared", label: "害怕" },
+                            { value: "terrified", label: "恐懼" },
+                            { value: "screaming", label: "尖叫" },
+                            { value: "nervous", label: "緊張" },
+                            { value: "panicked", label: "驚慌" },
+                            { value: "surprised", label: "驚訝" },
+                            { value: "confused", label: "困惑" },
+                            { value: "bored", label: "無聊" },
+                            { value: "expressionless", label: "無表情" }
+                        ]
+                    },
+                    {
+                        name: "害羞與戀愛",
+                        tags: [
+                            { value: "blush", label: "臉紅" },
+                            { value: "shy", label: "害羞" },
+                            { value: "embarrassed", label: "尷尬" },
+                            { value: "flustered", label: "慌張/不知所措" },
+                            { value: "love struck", label: "戀愛腦/花痴" }
+                        ]
+                    },
+                    {
+                        name: "誘惑與H",
+                        tags: [
+                            { value: "aroused", label: "興奮(H)" },
+                            { value: "heavy breathing", label: "喘息" },
+                            { value: "seductive smile", label: "誘惑笑" },
+                            { value: "naughty face", label: "調皮/色氣臉" },
+                            { value: "smirk", label: "壞笑" },
+                            { value: "lewd", label: "淫蕩" },
+                            { value: "ahegao", label: "阿嘿顏" },
+                            { value: "orgasm face", label: "高潮臉" },
+                            { value: "yandere", label: "病嬌" },
+                            { value: "crazy", label: "瘋狂" },
+                            { value: "drunk", label: "喝醉" },
+                            { value: "sleepy", label: "想睡" }
+                        ]
+                    },
+                    {
+                        name: "嘴部動作",
+                        tags: [
+                            { value: "open mouth", label: "張嘴" },
+                            { value: "closed mouth", label: "閉嘴" },
+                            { value: "parted lips", label: "微張嘴" },
+                            { value: "pout", label: "嘟嘴" },
+                            { value: "tongue", label: "舌頭" },
+                            { value: "tongue out", label: "吐舌" },
+                            { value: "licking lips", label: "舔嘴唇" },
+                            { value: "biting lip", label: "咬嘴唇" },
+                            { value: "saliva", label: "唾液" },
+                            { value: "drooling", label: "流口水" },
+                            { value: "fang", label: "虎牙" }
+                        ]
+                    },
+                    {
+                        name: "眼部狀態",
+                        tags: [
+                            { value: "closed eyes", label: "閉眼" },
+                            { value: "half-closed eyes", label: "半閉眼" },
+                            { value: "one eye closed", label: "單眼閉" },
+                            { value: "wink", label: "眨眼" },
+                            { value: "squinting", label: "瞇眼" },
+                            { value: "wide eyes", label: "睜大眼" },
+                            { value: "rolling eyes", label: "翻白眼" },
+                            { value: "cross-eyed", label: "鬥雞眼" },
+                            { value: "jitome", label: "盯視/鄙視眼" },
+                            { value: "tareme", label: "垂眼" },
+                            { value: "tsurime", label: "吊眼" },
+                            { value: "heart-shaped pupils", label: "愛心瞳孔" },
+                            { value: "star-shaped pupils", label: "星星瞳孔" },
+                            { value: "spiral eyes", label: "圈圈眼" },
+                            { value: "glowing eyes", label: "發光眼" },
+                            { value: "empty eyes", label: "無神眼" },
+                            { value: "sanpaku", label: "三白眼" },
+                            { value: "bags under eyes", label: "黑眼圈" }
+                        ]
+                    }
                 ]
             },
             clothing: {
                 name: "服裝",
-                tags: [
-                    // --- 裸露與內衣 ---
-                    { value: "naked", label: "全裸" },
-                    { value: "no bra", label: "無胸罩" },
-                    { value: "no panties", label: "無內褲" },
-                    { value: "underwear", label: "內衣褲" },
-                    { value: "bra", label: "胸罩" },
-                    { value: "sports bra", label: "運動內衣" },
-                    { value: "panties", label: "內褲" },
-                    { value: "string panties", label: "細帶內褲" },
-                    { value: "lingerie", label: "性感內衣" },
-                    { value: "lace lingerie", label: "蕾絲內衣" },
-                    { value: "black lingerie", label: "黑內衣" },
-                    { value: "white lingerie", label: "白內衣" },
-                    { value: "red lingerie", label: "紅內衣" },
-
-                    // --- 泳裝 ---
-                    { value: "bikini", label: "比基尼" },
-                    { value: "micro bikini", label: "微型比基尼" },
-                    { value: "sling bikini", label: "吊帶比基尼" },
-                    { value: "school swimsuit", label: "死庫水" },
-                    { value: "one-piece swimsuit", label: "連身泳衣" },
-                    { value: "competition swimsuit", label: "競賽泳衣" },
-
-                    // --- 上裝 (T恤/襯衫/毛衣) ---
-                    { value: "shirt", label: "襯衫" },
-                    { value: "white shirt", label: "白襯衫" },
-                    { value: "open shirt", label: "襯衫敞開" },
-                    { value: "boyfriend shirt", label: "男友襯衫" },
-                    { value: "blouse", label: "女襯衫" },
-                    { value: "t-shirt", label: "T恤" },
-                    { value: "tank top", label: "背心" },
-                    { value: "camisole", label: "細肩帶背心" },
-                    { value: "tube top", label: "平口背心" },
-                    { value: "crop top", label: "短版上衣" },
-                    { value: "sweater", label: "毛衣" },
-                    { value: "turtleneck", label: "高領毛衣" },
-                    { value: "ribbed sweater", label: "羅紋毛衣" },
-                    { value: "open chest sweater", label: "開胸毛衣" },
-                    { value: "virgin killer sweater", label: "露背毛衣" },
-                    { value: "off-shoulder sweater", label: "露肩毛衣" },
-                    { value: "hoodie", label: "帽T" },
-
-                    // --- 外套 ---
-                    { value: "jacket", label: "夾克" },
-                    { value: "coat", label: "大衣" },
-                    { value: "cardigan", label: "開襟衫" },
-                    { value: "blazer", label: "西裝外套" },
-
-                    // --- 下著 (褲/裙) ---
-                    { value: "skirt", label: "裙子" },
-                    { value: "miniskirt", label: "迷你裙" },
-                    { value: "pleated skirt", label: "百褶裙" },
-                    { value: "pencil skirt", label: "窄裙" },
-                    { value: "long skirt", label: "長裙" },
-                    { value: "shorts", label: "短褲" },
-                    { value: "dolphin shorts", label: "真理褲" },
-                    { value: "denim shorts", label: "牛仔短褲" },
-                    { value: "jeans", label: "牛仔褲" },
-                    { value: "skinny jeans", label: "緊身牛仔褲" },
-                    { value: "yoga pants", label: "瑜珈褲" },
-                    { value: "leggings", label: "內搭褲" },
-                    { value: "bloomers", label: "布魯馬" },
-
-                    // --- 洋裝與連身衣 ---
-                    { value: "dress", label: "洋裝" },
-                    { value: "sundress", label: "細肩帶洋裝" },
-                    { value: "evening gown", label: "晚禮服" },
-                    { value: "bodysuit", label: "緊身衣" },
-
-                    // --- 制服與職業 ---
-                    { value: "school uniform", label: "校服" },
-                    { value: "serafuku", label: "水手服" },
-                    { value: "gym uniform", label: "體操服" },
-                    { value: "maid uniform", label: "女僕裝" },
-                    { value: "nurse uniform", label: "護士服" },
-                    { value: "police uniform", label: "警服" },
-                    { value: "military uniform", label: "軍服" },
-                    { value: "office lady uniform", label: "OL套裝" },
-                    { value: "suit", label: "西裝" },
-
-                    // --- 傳統與Cosplay ---
-                    { value: "cheongsam", label: "旗袍" },
-                    { value: "china dress", label: "旗袍(日式)" },
-                    { value: "kimono", label: "和服" },
-                    { value: "yukata", label: "浴衣" },
-                    { value: "hanfu", label: "漢服" },
-                    { value: "miko outfit", label: "巫女服" },
-                    { value: "wedding dress", label: "婚紗" },
-                    { value: "gothic lolita", label: "哥德蘿莉" },
-                    { value: "bunny suit", label: "兔女郎裝" },
-                    { value: "ninja suit", label: "忍者服" },
-                    { value: "apron", label: "圍裙" },
-                    { value: "naked apron", label: "裸體圍裙" },
-
-                    // --- 盔甲與機甲 ---
-                    { value: "armor", label: "盔甲" },
-                    { value: "plate armor", label: "板甲" },
-                    { value: "power suit", label: "動力裝甲" },
-                    { value: "mecha suit", label: "機甲" },
-
-                    // --- 材質與屬性 ---
-                    { value: "see-through", label: "透視裝" },
-                    { value: "wet clothes", label: "濕衣" },
-                    { value: "latex", label: "乳膠衣" },
-                    { value: "leather", label: "皮革" },
-                    { value: "satin", label: "緞面" },
-                    { value: "silk", label: "絲綢" }
+                groups: [
+                    {
+                        name: "裸露與內衣",
+                        tags: [
+                            { value: "naked", label: "全裸" },
+                            { value: "no bra", label: "無胸罩" },
+                            { value: "no panties", label: "無內褲" },
+                            { value: "underwear", label: "內衣褲" },
+                            { value: "bra", label: "胸罩" },
+                            { value: "sports bra", label: "運動內衣" },
+                            { value: "panties", label: "內褲" },
+                            { value: "string panties", label: "細帶內褲" },
+                            { value: "lingerie", label: "性感內衣" },
+                            { value: "lace lingerie", label: "蕾絲內衣" },
+                            { value: "black lingerie", label: "黑內衣" },
+                            { value: "white lingerie", label: "白內衣" },
+                            { value: "red lingerie", label: "紅內衣" }
+                        ]
+                    },
+                    {
+                        name: "泳裝",
+                        tags: [
+                            { value: "bikini", label: "比基尼" },
+                            { value: "micro bikini", label: "微型比基尼" },
+                            { value: "sling bikini", label: "吊帶比基尼" },
+                            { value: "school swimsuit", label: "死庫水" },
+                            { value: "one-piece swimsuit", label: "連身泳衣" },
+                            { value: "competition swimsuit", label: "競賽泳衣" }
+                        ]
+                    },
+                    {
+                        name: "上裝",
+                        tags: [
+                            { value: "shirt", label: "襯衫" },
+                            { value: "white shirt", label: "白襯衫" },
+                            { value: "open shirt", label: "襯衫敞開" },
+                            { value: "boyfriend shirt", label: "男友襯衫" },
+                            { value: "blouse", label: "女襯衫" },
+                            { value: "t-shirt", label: "T恤" },
+                            { value: "tank top", label: "背心" },
+                            { value: "camisole", label: "細肩帶背心" },
+                            { value: "tube top", label: "平口背心" },
+                            { value: "crop top", label: "短版上衣" },
+                            { value: "sweater", label: "毛衣" },
+                            { value: "turtleneck", label: "高領毛衣" },
+                            { value: "ribbed sweater", label: "羅紋毛衣" },
+                            { value: "open chest sweater", label: "開胸毛衣" },
+                            { value: "virgin killer sweater", label: "露背毛衣" },
+                            { value: "off-shoulder sweater", label: "露肩毛衣" },
+                            { value: "hoodie", label: "帽T" }
+                        ]
+                    },
+                    {
+                        name: "外套",
+                        tags: [
+                            { value: "jacket", label: "夾克" },
+                            { value: "coat", label: "大衣" },
+                            { value: "cardigan", label: "開襟衫" },
+                            { value: "blazer", label: "西裝外套" }
+                        ]
+                    },
+                    {
+                        name: "下著",
+                        tags: [
+                            { value: "skirt", label: "裙子" },
+                            { value: "miniskirt", label: "迷你裙" },
+                            { value: "pleated skirt", label: "百褶裙" },
+                            { value: "pencil skirt", label: "窄裙" },
+                            { value: "long skirt", label: "長裙" },
+                            { value: "shorts", label: "短褲" },
+                            { value: "dolphin shorts", label: "真理褲" },
+                            { value: "denim shorts", label: "牛仔短褲" },
+                            { value: "jeans", label: "牛仔褲" },
+                            { value: "skinny jeans", label: "緊身牛仔褲" },
+                            { value: "yoga pants", label: "瑜珈褲" },
+                            { value: "leggings", label: "內搭褲" },
+                            { value: "bloomers", label: "布魯馬" }
+                        ]
+                    },
+                    {
+                        name: "洋裝連身衣",
+                        tags: [
+                            { value: "dress", label: "洋裝" },
+                            { value: "sundress", label: "細肩帶洋裝" },
+                            { value: "evening gown", label: "晚禮服" },
+                            { value: "bodysuit", label: "緊身衣" }
+                        ]
+                    },
+                    {
+                        name: "制服與職業",
+                        tags: [
+                            { value: "school uniform", label: "校服" },
+                            { value: "serafuku", label: "水手服" },
+                            { value: "gym uniform", label: "體操服" },
+                            { value: "maid uniform", label: "女僕裝" },
+                            { value: "nurse uniform", label: "護士服" },
+                            { value: "police uniform", label: "警服" },
+                            { value: "military uniform", label: "軍服" },
+                            { value: "office lady uniform", label: "OL套裝" },
+                            { value: "suit", label: "西裝" }
+                        ]
+                    },
+                    {
+                        name: "傳統與Cos",
+                        tags: [
+                            { value: "cheongsam", label: "旗袍" },
+                            { value: "china dress", label: "旗袍(日式)" },
+                            { value: "kimono", label: "和服" },
+                            { value: "yukata", label: "浴衣" },
+                            { value: "hanfu", label: "漢服" },
+                            { value: "miko outfit", label: "巫女服" },
+                            { value: "wedding dress", label: "婚紗" },
+                            { value: "gothic lolita", label: "哥德蘿莉" },
+                            { value: "bunny suit", label: "兔女郎裝" },
+                            { value: "ninja suit", label: "忍者服" },
+                            { value: "apron", label: "圍裙" },
+                            { value: "naked apron", label: "裸體圍裙" }
+                        ]
+                    },
+                    {
+                        name: "盔甲與機甲",
+                        tags: [
+                            { value: "armor", label: "盔甲" },
+                            { value: "plate armor", label: "板甲" },
+                            { value: "power suit", label: "動力裝甲" },
+                            { value: "mecha suit", label: "機甲" }
+                        ]
+                    },
+                    {
+                        name: "材質與屬性",
+                        tags: [
+                            { value: "see-through", label: "透視裝" },
+                            { value: "wet clothes", label: "濕衣" },
+                            { value: "latex", label: "乳膠衣" },
+                            { value: "leather", label: "皮革" },
+                            { value: "satin", label: "緞面" },
+                            { value: "silk", label: "絲綢" }
+                        ]
+                    }
                 ]
             },
             accessories: {
-                name: "襪類、飾品與道具",
-                tags: [
-                    // --- 襪子與腿部 ---
-                    { value: "socks", label: "襪子" },
-                    { value: "ankle socks", label: "踝襪" },
-                    { value: "knee highs", label: "膝下襪" },
-                    { value: "thighhighs", label: "過膝襪" },
-                    { value: "stockings", label: "長襪" },
-                    { value: "pantyhose", label: "連褲襪" },
-                    { value: "black pantyhose", label: "黑絲" },
-                    { value: "white stockings", label: "白絲" },
-                    { value: "fishnets", label: "網襪" },
-                    { value: "torn pantyhose", label: "破絲襪" },
-                    { value: "bobby socks", label: "短襪" },
-                    { value: "loose socks", label: "泡泡襪" },
-                    { value: "striped socks", label: "條紋襪" },
-                    { value: "garter straps", label: "吊襪帶" },
-                    { value: "bare legs", label: "裸腿" },
-
-                    // --- 鞋子 ---
-                    { value: "shoes", label: "鞋子" },
-                    { value: "boots", label: "靴子" },
-                    { value: "thigh boots", label: "過膝靴" },
-                    { value: "heels", label: "高跟鞋" },
-                    { value: "high heels", label: "細高跟" },
-                    { value: "sneakers", label: "運動鞋" },
-                    { value: "loafers", label: "樂福鞋" },
-                    { value: "sandals", label: "涼鞋" },
-                    { value: "slippers", label: "拖鞋" },
-                    { value: "barefoot", label: "赤腳" },
-
-                    // --- 帽子與頭飾 ---
-                    { value: "hat", label: "帽子" },
-                    { value: "cap", label: "鴨舌帽" },
-                    { value: "beret", label: "貝雷帽" },
-                    { value: "witch hat", label: "魔女帽" },
-                    { value: "helmet", label: "頭盔" },
-                    { value: "veil", label: "頭紗" },
-                    { value: "hair ornament", label: "髮飾" },
-                    { value: "hair bow", label: "蝴蝶結" },
-                    { value: "hair ribbon", label: "髮帶" },
-                    { value: "hairband", label: "髮箍" },
-                    { value: "hairclip", label: "髮夾" },
-                    { value: "tiara", label: "皇冠" },
-                    { value: "halo", label: "光環" },
-
-                    // --- 臉部與耳朵 ---
-                    { value: "glasses", label: "眼鏡" },
-                    { value: "sunglasses", label: "墨鏡" },
-                    { value: "mask", label: "面具/口罩" },
-                    { value: "gas mask", label: "防毒面具" },
-                    { value: "fox mask", label: "狐面具" },
-                    { value: "eyepatch", label: "眼罩" },
-                    { value: "blindfold", label: "眼罩(矇眼)" },
-                    { value: "headphone", label: "耳機" },
-                    { value: "animal ears", label: "獸耳" },
-                    { value: "cat ears", label: "貓耳" },
-                    { value: "fox ears", label: "狐耳" },
-                    { value: "bunny ears", label: "兔耳" },
-                    { value: "horns", label: "角" },
-                    { value: "demon horns", label: "惡魔角" },
-
-                    // --- 飾品與頸部 ---
-                    { value: "earrings", label: "耳環" },
-                    { value: "necklace", label: "項鍊" },
-                    { value: "choker", label: "頸圈" },
-                    { value: "collar", label: "狗項圈" },
-                    { value: "leash", label: "牽繩" },
-                    { value: "chain", label: "鎖鏈" },
-                    { value: "tie", label: "領帶" },
-                    { value: "scarf", label: "圍巾" },
-                    { value: "bracelet", label: "手環" },
-                    { value: "wristband", label: "護腕" },
-                    { value: "ring", label: "戒指" },
-
-                    // --- 手套與其他身體部件 ---
-                    { value: "gloves", label: "手套" },
-                    { value: "fingerless gloves", label: "露指手套" },
-                    { value: "long gloves", label: "長手套" },
-                    { value: "elbow gloves", label: "肘部手套" },
-                    { value: "latex gloves", label: "乳膠手套" },
-                    { value: "armored gloves", label: "鎧甲手套" },
-                    { value: "wings", label: "翅膀" },
-                    { value: "bat wings", label: "蝙蝠翅膀" },
-                    { value: "angel wings", label: "天使翅膀" },
-                    { value: "tail", label: "尾巴" },
-
-                    // --- 武器 ---
-                    { value: "weapon", label: "武器" },
-                    { value: "sword", label: "劍" },
-                    { value: "katana", label: "武士刀" },
-                    { value: "greatsword", label: "大劍" },
-                    { value: "dagger", label: "短劍/匕首" },
-                    { value: "knife", label: "刀" },
-                    { value: "scythe", label: "鐮刀" },
-                    { value: "bow", label: "弓" },
-                    { value: "arrow", label: "箭" },
-                    { value: "gun", label: "槍" },
-                    { value: "handgun", label: "手槍" },
-                    { value: "rifle", label: "步槍" },
-                    { value: "spear", label: "長槍/矛" },
-                    { value: "axe", label: "斧頭" },
-                    { value: "staff", label: "法杖" },
-                    { value: "wand", label: "魔杖" },
-                    { value: "shield", label: "盾牌" },
-
-                    // --- 隨身物品/道具 ---
-                    { value: "bag", label: "包包" },
-                    { value: "backpack", label: "背包" },
-                    { value: "smartphone", label: "智慧型手機" },
-                    { value: "camera", label: "相機" },
-                    { value: "book", label: "書" },
-                    { value: "flower", label: "花" },
-                    { value: "bouquet", label: "花束" },
-                    { value: "cigarette", label: "香菸" },
-                    { value: "pipe", label: "煙斗" },
-                    { value: "umbrella", label: "雨傘" },
-                    { value: "transparent umbrella", label: "透明傘" },
-
-                    // --- 樂器 ---
-                    { value: "instrument", label: "樂器" },
-                    { value: "guitar", label: "吉他" },
-                    { value: "violin", label: "小提琴" },
-                    { value: "piano", label: "鋼琴" },
-                    { value: "microphone", label: "麥克風" },
-
-                    // --- 食物與飲料 ---
-                    { value: "food", label: "食物" },
-                    { value: "cake", label: "蛋糕" },
-                    { value: "ice cream", label: "冰淇淋" },
-                    { value: "chocolate", label: "巧克力" },
-                    { value: "tea", label: "茶" },
-                    { value: "coffee", label: "咖啡" },
-                    { value: "alcohol", label: "酒" },
-                    { value: "wine glass", label: "酒杯" },
-                    { value: "bottle", label: "瓶子" }
+                name: "襪飾與道具",
+                groups: [
+                    {
+                        name: "襪子與腿部",
+                        tags: [
+                            { value: "socks", label: "襪子" },
+                            { value: "ankle socks", label: "踝襪" },
+                            { value: "knee highs", label: "膝下襪" },
+                            { value: "thighhighs", label: "過膝襪" },
+                            { value: "stockings", label: "長襪" },
+                            { value: "pantyhose", label: "連褲襪" },
+                            { value: "black pantyhose", label: "黑絲" },
+                            { value: "white stockings", label: "白絲" },
+                            { value: "fishnets", label: "網襪" },
+                            { value: "torn pantyhose", label: "破絲襪" },
+                            { value: "bobby socks", label: "短襪" },
+                            { value: "loose socks", label: "泡泡襪" },
+                            { value: "striped socks", label: "條紋襪" },
+                            { value: "garter straps", label: "吊襪帶" },
+                            { value: "bare legs", label: "裸腿" }
+                        ]
+                    },
+                    {
+                        name: "鞋子",
+                        tags: [
+                            { value: "shoes", label: "鞋子" },
+                            { value: "boots", label: "靴子" },
+                            { value: "thigh boots", label: "過膝靴" },
+                            { value: "heels", label: "高跟鞋" },
+                            { value: "high heels", label: "細高跟" },
+                            { value: "sneakers", label: "運動鞋" },
+                            { value: "loafers", label: "樂福鞋" },
+                            { value: "sandals", label: "涼鞋" },
+                            { value: "slippers", label: "拖鞋" },
+                            { value: "barefoot", label: "赤腳" }
+                        ]
+                    },
+                    {
+                        name: "帽子與頭飾",
+                        tags: [
+                            { value: "hat", label: "帽子" },
+                            { value: "cap", label: "鴨舌帽" },
+                            { value: "beret", label: "貝雷帽" },
+                            { value: "witch hat", label: "魔女帽" },
+                            { value: "helmet", label: "頭盔" },
+                            { value: "veil", label: "頭紗" },
+                            { value: "hair ornament", label: "髮飾" },
+                            { value: "hair bow", label: "蝴蝶結" },
+                            { value: "hair ribbon", label: "髮帶" },
+                            { value: "hairband", label: "髮箍" },
+                            { value: "hairclip", label: "髮夾" },
+                            { value: "tiara", label: "皇冠" },
+                            { value: "halo", label: "光環" }
+                        ]
+                    },
+                    {
+                        name: "臉部與耳朵",
+                        tags: [
+                            { value: "glasses", label: "眼鏡" },
+                            { value: "sunglasses", label: "墨鏡" },
+                            { value: "mask", label: "面具/口罩" },
+                            { value: "gas mask", label: "防毒面具" },
+                            { value: "fox mask", label: "狐面具" },
+                            { value: "eyepatch", label: "眼罩" },
+                            { value: "blindfold", label: "眼罩(矇眼)" },
+                            { value: "headphone", label: "耳機" },
+                            { value: "animal ears", label: "獸耳" },
+                            { value: "cat ears", label: "貓耳" },
+                            { value: "fox ears", label: "狐耳" },
+                            { value: "bunny ears", label: "兔耳" },
+                            { value: "horns", label: "角" },
+                            { value: "demon horns", label: "惡魔角" }
+                        ]
+                    },
+                    {
+                        name: "飾品與頸部",
+                        tags: [
+                            { value: "earrings", label: "耳環" },
+                            { value: "necklace", label: "項鍊" },
+                            { value: "choker", label: "頸圈" },
+                            { value: "collar", label: "狗項圈" },
+                            { value: "leash", label: "牽繩" },
+                            { value: "chain", label: "鎖鏈" },
+                            { value: "tie", label: "領帶" },
+                            { value: "scarf", label: "圍巾" },
+                            { value: "bracelet", label: "手環" },
+                            { value: "wristband", label: "護腕" },
+                            { value: "ring", label: "戒指" }
+                        ]
+                    },
+                    {
+                        name: "手套與部件",
+                        tags: [
+                            { value: "gloves", label: "手套" },
+                            { value: "fingerless gloves", label: "露指手套" },
+                            { value: "long gloves", label: "長手套" },
+                            { value: "elbow gloves", label: "肘部手套" },
+                            { value: "latex gloves", label: "乳膠手套" },
+                            { value: "armored gloves", label: "鎧甲手套" },
+                            { value: "wings", label: "翅膀" },
+                            { value: "bat wings", label: "蝙蝠翅膀" },
+                            { value: "angel wings", label: "天使翅膀" },
+                            { value: "tail", label: "尾巴" }
+                        ]
+                    },
+                    {
+                        name: "武器",
+                        tags: [
+                            { value: "weapon", label: "武器" },
+                            { value: "sword", label: "劍" },
+                            { value: "katana", label: "武士刀" },
+                            { value: "greatsword", label: "大劍" },
+                            { value: "dagger", label: "短劍/匕首" },
+                            { value: "knife", label: "刀" },
+                            { value: "scythe", label: "鐮刀" },
+                            { value: "bow", label: "弓" },
+                            { value: "arrow", label: "箭" },
+                            { value: "gun", label: "槍" },
+                            { value: "handgun", label: "手槍" },
+                            { value: "rifle", label: "步槍" },
+                            { value: "spear", label: "長槍/矛" },
+                            { value: "axe", label: "斧頭" },
+                            { value: "staff", label: "法杖" },
+                            { value: "wand", label: "魔杖" },
+                            { value: "shield", label: "盾牌" }
+                        ]
+                    },
+                    {
+                        name: "道具",
+                        tags: [
+                            { value: "bag", label: "包包" },
+                            { value: "backpack", label: "背包" },
+                            { value: "smartphone", label: "智慧型手機" },
+                            { value: "camera", label: "相機" },
+                            { value: "book", label: "書" },
+                            { value: "flower", label: "花" },
+                            { value: "bouquet", label: "花束" },
+                            { value: "cigarette", label: "香菸" },
+                            { value: "pipe", label: "煙斗" },
+                            { value: "umbrella", label: "雨傘" },
+                            { value: "transparent umbrella", label: "透明傘" }
+                        ]
+                    },
+                    {
+                        name: "樂器",
+                        tags: [
+                            { value: "instrument", label: "樂器" },
+                            { value: "guitar", label: "吉他" },
+                            { value: "violin", label: "小提琴" },
+                            { value: "piano", label: "鋼琴" },
+                            { value: "microphone", label: "麥克風" }
+                        ]
+                    },
+                    {
+                        name: "食物與飲料",
+                        tags: [
+                            { value: "food", label: "食物" },
+                            { value: "cake", label: "蛋糕" },
+                            { value: "ice cream", label: "冰淇淋" },
+                            { value: "chocolate", label: "巧克力" },
+                            { value: "tea", label: "茶" },
+                            { value: "coffee", label: "咖啡" },
+                            { value: "alcohol", label: "酒" },
+                            { value: "wine glass", label: "酒杯" },
+                            { value: "bottle", label: "瓶子" }
+                        ]
+                    }
                 ]
             },
             environment: {
                 name: "環境",
-                tags: [
-                    // --- 基礎與抽象背景 ---
-                    { value: "simple background", label: "簡單背景" },
-                    { value: "white background", label: "白背景" },
-                    { value: "grey background", label: "灰背景" },
-                    { value: "black background", label: "黑背景" },
-                    { value: "indoors", label: "室內" },
-                    { value: "outdoors", label: "戶外" },
-
-                    // --- 室內：居家與生活 ---
-                    { value: "bedroom", label: "臥室" },
-                    { value: "bed", label: "床" },
-                    { value: "sheets", label: "床單" },
-                    { value: "living room", label: "客廳" },
-                    { value: "kitchen", label: "廚房" },
-                    { value: "bathroom", label: "浴室" },
-                    { value: "shower", label: "淋浴間" },
-                    { value: "bathtub", label: "浴缸" },
-                    { value: "tatami", label: "榻榻米房" },
-                    { value: "balcony", label: "陽台" },
-
-                    // --- 室內：學校與辦公 ---
-                    { value: "classroom", label: "教室" },
-                    { value: "library", label: "圖書館" },
-                    { value: "infirmary", label: "保健室" },
-                    { value: "office", label: "辦公室" },
-                    { value: "gym", label: "體育館" },
-                    { value: "locker room", label: "更衣室" },
-
-                    // --- 室內：公共與商業 ---
-                    { value: "cafe", label: "咖啡廳" },
-                    { value: "bar", label: "酒吧" },
-                    { value: "restaurant", label: "餐廳" },
-                    { value: "convenience store", label: "便利商店" },
-                    { value: "supermarket", label: "超市" },
-                    { value: "department store", label: "百貨公司" },
-                    { value: "hospital", label: "醫院" },
-                    { value: "love hotel", label: "摩鐵" },
-                    { value: "train station", label: "火車站" },
-                    { value: "train interior", label: "電車內" },
-
-                    // --- 城市與街道 ---
-                    { value: "city", label: "城市" },
-                    { value: "street", label: "街道" },
-                    { value: "alley", label: "巷子" },
-                    { value: "park", label: "公園" },
-                    { value: "rooftop", label: "屋頂" },
-                    { value: "bus stop", label: "公車站" },
-                    { value: "ruins", label: "廢墟" },
-                    { value: "post-apocalyptic", label: "末日廢墟" },
-                    { value: "neon city", label: "霓虹城市" },
-                    { value: "cyberpunk city", label: "賽博城市" },
-
-                    // --- 奇幻、歷史與特殊場所 ---
-                    { value: "castle", label: "城堡" },
-                    { value: "palace", label: "宮殿" },
-                    { value: "shrine", label: "神社" },
-                    { value: "torii", label: "鳥居" },
-                    { value: "church", label: "教堂" },
-                    { value: "stained glass", label: "彩繪玻璃" },
-                    { value: "dungeon", label: "地牢" },
-                    { value: "clock tower", label: "鐘塔" },
-                    { value: "graveyard", label: "墓地" },
-                    { value: "magic circle", label: "魔法陣" },
-                    { value: "fantasy world", label: "奇幻世界" },
-                    { value: "floating island", label: "浮空島" },
-                    { value: "studio", label: "攝影棚" },
-                    { value: "stage", label: "舞台" },
-                    { value: "laboratory", label: "實驗室" },
-                    { value: "spaceship", label: "太空船" },
-
-                    // --- 大自然與風景 ---
-                    { value: "forest", label: "森林" },
-                    { value: "trees", label: "樹木" },
-                    { value: "grass", label: "草地" },
-                    { value: "flower field", label: "花田" },
-                    { value: "garden", label: "花園" },
-                    { value: "beach", label: "海灘" },
-                    { value: "ocean", label: "海洋" },
-                    { value: "underwater", label: "水下" },
-                    { value: "pool", label: "泳池" },
-                    { value: "onsen", label: "溫泉" },
-                    { value: "river", label: "河流" },
-                    { value: "mountain", label: "山" },
-                    { value: "cliff", label: "懸崖" },
-                    { value: "cave", label: "洞穴" },
-                    { value: "underground lake", label: "地底湖" },
-
-                    // --- 天空與宇宙 ---
-                    { value: "sky", label: "天空" },
-                    { value: "cloud", label: "雲" },
-                    { value: "sun", label: "太陽" },
-                    { value: "moon", label: "月亮" },
-                    { value: "full moon", label: "滿月" },
-                    { value: "stars", label: "星星" },
-                    { value: "space", label: "太空" },
-                    { value: "nebula", label: "星雲" },
-
-                    // --- 時間與天氣 ---
-                    { value: "day", label: "白天" },
-                    { value: "night", label: "夜晚" },
-                    { value: "morning", label: "早晨" },
-                    { value: "sunset", label: "日落" },
-                    { value: "sunrise", label: "日出" },
-                    { value: "twilight", label: "黃昏" },
-                    { value: "sunny", label: "晴天" },
-                    { value: "cloudy", label: "多雲" },
-                    { value: "raining", label: "下雨" },
-                    { value: "snowing", label: "下雪" },
-                    { value: "wind", label: "風" },
-                    { value: "fog", label: "霧" },
-                    { value: "fireworks", label: "煙火" }
+                groups: [
+                    {
+                        name: "抽象與基礎",
+                        tags: [
+                            { value: "simple background", label: "簡單背景" },
+                            { value: "white background", label: "白背景" },
+                            { value: "grey background", label: "灰背景" },
+                            { value: "black background", label: "黑背景" },
+                            { value: "indoors", label: "室內" },
+                            { value: "outdoors", label: "戶外" }
+                        ]
+                    },
+                    {
+                        name: "居家生活",
+                        tags: [
+                            { value: "bedroom", label: "臥室" },
+                            { value: "bed", label: "床" },
+                            { value: "sheets", label: "床單" },
+                            { value: "living room", label: "客廳" },
+                            { value: "kitchen", label: "廚房" },
+                            { value: "bathroom", label: "浴室" },
+                            { value: "shower", label: "淋浴間" },
+                            { value: "bathtub", label: "浴缸" },
+                            { value: "tatami", label: "榻榻米房" },
+                            { value: "balcony", label: "陽台" }
+                        ]
+                    },
+                    {
+                        name: "學校辦公",
+                        tags: [
+                            { value: "classroom", label: "教室" },
+                            { value: "library", label: "圖書館" },
+                            { value: "infirmary", label: "保健室" },
+                            { value: "office", label: "辦公室" },
+                            { value: "gym", label: "體育館" },
+                            { value: "locker room", label: "更衣室" }
+                        ]
+                    },
+                    {
+                        name: "公共場所",
+                        tags: [
+                            { value: "cafe", label: "咖啡廳" },
+                            { value: "bar", label: "酒吧" },
+                            { value: "restaurant", label: "餐廳" },
+                            { value: "convenience store", label: "便利商店" },
+                            { value: "supermarket", label: "超市" },
+                            { value: "department store", label: "百貨公司" },
+                            { value: "hospital", label: "醫院" },
+                            { value: "love hotel", label: "摩鐵" },
+                            { value: "train station", label: "火車站" },
+                            { value: "train interior", label: "電車內" }
+                        ]
+                    },
+                    {
+                        name: "城市街道",
+                        tags: [
+                            { value: "city", label: "城市" },
+                            { value: "street", label: "街道" },
+                            { value: "alley", label: "巷子" },
+                            { value: "park", label: "公園" },
+                            { value: "rooftop", label: "屋頂" },
+                            { value: "bus stop", label: "公車站" },
+                            { value: "ruins", label: "廢墟" },
+                            { value: "post-apocalyptic", label: "末日廢墟" },
+                            { value: "neon city", label: "霓虹城市" },
+                            { value: "cyberpunk city", label: "賽博城市" }
+                        ]
+                    },
+                    {
+                        name: "奇幻與特殊",
+                        tags: [
+                            { value: "castle", label: "城堡" },
+                            { value: "palace", label: "宮殿" },
+                            { value: "shrine", label: "神社" },
+                            { value: "torii", label: "鳥居" },
+                            { value: "church", label: "教堂" },
+                            { value: "stained glass", label: "彩繪玻璃" },
+                            { value: "dungeon", label: "地牢" },
+                            { value: "clock tower", label: "鐘塔" },
+                            { value: "graveyard", label: "墓地" },
+                            { value: "magic circle", label: "魔法陣" },
+                            { value: "fantasy world", label: "奇幻世界" },
+                            { value: "floating island", label: "浮空島" },
+                            { value: "studio", label: "攝影棚" },
+                            { value: "stage", label: "舞台" },
+                            { value: "laboratory", label: "實驗室" },
+                            { value: "spaceship", label: "太空船" }
+                        ]
+                    },
+                    {
+                        name: "大自然",
+                        tags: [
+                            { value: "forest", label: "森林" },
+                            { value: "trees", label: "樹木" },
+                            { value: "grass", label: "草地" },
+                            { value: "flower field", label: "花田" },
+                            { value: "garden", label: "花園" },
+                            { value: "beach", label: "海灘" },
+                            { value: "ocean", label: "海洋" },
+                            { value: "underwater", label: "水下" },
+                            { value: "pool", label: "泳池" },
+                            { value: "onsen", label: "溫泉" },
+                            { value: "river", label: "河流" },
+                            { value: "mountain", label: "山" },
+                            { value: "cliff", label: "懸崖" },
+                            { value: "cave", label: "洞穴" },
+                            { value: "underground lake", label: "地底湖" }
+                        ]
+                    },
+                    {
+                        name: "天空宇宙",
+                        tags: [
+                            { value: "sky", label: "天空" },
+                            { value: "cloud", label: "雲" },
+                            { value: "sun", label: "太陽" },
+                            { value: "moon", label: "月亮" },
+                            { value: "full moon", label: "滿月" },
+                            { value: "stars", label: "星星" },
+                            { value: "space", label: "太空" },
+                            { value: "nebula", label: "星雲" }
+                        ]
+                    },
+                    {
+                        name: "時間天氣",
+                        tags: [
+                            { value: "day", label: "白天" },
+                            { value: "night", label: "夜晚" },
+                            { value: "morning", label: "早晨" },
+                            { value: "sunset", label: "日落" },
+                            { value: "sunrise", label: "日出" },
+                            { value: "twilight", label: "黃昏" },
+                            { value: "sunny", label: "晴天" },
+                            { value: "cloudy", label: "多雲" },
+                            { value: "raining", label: "下雨" },
+                            { value: "snowing", label: "下雪" },
+                            { value: "wind", label: "風" },
+                            { value: "fog", label: "霧" },
+                            { value: "fireworks", label: "煙火" }
+                        ]
+                    }
                 ]
             },
             camera: {
                 name: "鏡頭與光影",
-                tags: [
-                    // --- 視角與構圖 ---
-                    { value: "cowboy shot", label: "七分身(膝蓋以上)" },
-                    { value: "full body", label: "全身" },
-                    { value: "upper body", label: "上半身" },
-                    { value: "close-up", label: "特寫" },
-                    { value: "face", label: "臉部特寫" },
-                    { value: "portrait", label: "肖像" },
-                    { value: "from above", label: "俯視" },
-                    { value: "from below", label: "仰視" },
-                    { value: "from behind", label: "背後視角" },
-                    { value: "from side", label: "側面視角" },
-                    { value: "back", label: "背影" },
-                    { value: "dutch angle", label: "傾斜構圖" },
-                    { value: "fisheye", label: "魚眼" },
-                    { value: "wide angle", label: "廣角" },
-                    { value: "macro", label: "微距" },
-                    { value: "isometric", label: "等軸測視角(2.5D)" },
-                    { value: "pov", label: "第一人稱視角" },
-                    { value: "looking at viewer", label: "直視鏡頭" },
-                    { value: "eye contact", label: "眼神接觸" },
-                    
-                    // --- 鏡頭效果 ---
-                    { value: "depth of field", label: "景深" },
-                    { value: "bokeh", label: "背景模糊(散景)" },
-                    { value: "motion blur", label: "動態模糊" },
-                    { value: "chromatic aberration", label: "色差/故障風" },
-                    { value: "vignetting", label: "暈影(暗角)" },
-                    { value: "sharp focus", label: "清晰對焦" },
-                    { value: "soft focus", label: "柔焦" },
-                    { value: "lens flare", label: "鏡頭光暈" },
-
-                    // --- 光影氛圍 ---
-                    { value: "cinematic lighting", label: "電影光效" },
-                    { value: "natural light", label: "自然光" },
-                    { value: "sunlight", label: "陽光" },
-                    { value: "moonlight", label: "月光" },
-                    { value: "starlight", label: "星光" },
-                    { value: "backlighting", label: "背光" },
-                    { value: "rim lighting", label: "輪廓光/邊緣光" },
-                    { value: "volumetric lighting", label: "體積光/丁達爾效應" },
-                    { value: "crepuscular rays", label: "神光/耶穌光" },
-                    { value: "god rays", label: "聖光" },
-                    { value: "soft lighting", label: "柔光" },
-                    { value: "hard lighting", label: "強光/硬光" },
-                    { value: "dimly lit", label: "昏暗" },
-                    { value: "glowing", label: "發光" },
-                    { value: "bioluminescence", label: "生物發光" },
-                    { value: "neon lights", label: "霓虹燈" },
-                    { value: "shadow", label: "陰影" },
-                    { value: "silhouette", label: "剪影" },
-                    { value: "ray tracing", label: "光線追蹤" }
+                groups: [
+                    {
+                        name: "視角與構圖",
+                        tags: [
+                            { value: "cowboy shot", label: "七分身(膝蓋以上)" },
+                            { value: "full body", label: "全身" },
+                            { value: "upper body", label: "上半身" },
+                            { value: "close-up", label: "特寫" },
+                            { value: "face", label: "臉部特寫" },
+                            { value: "portrait", label: "肖像" },
+                            { value: "from above", label: "俯視" },
+                            { value: "from below", label: "仰視" },
+                            { value: "from behind", label: "背後視角" },
+                            { value: "from side", label: "側面視角" },
+                            { value: "back", label: "背影" },
+                            { value: "dutch angle", label: "傾斜構圖" },
+                            { value: "fisheye", label: "魚眼" },
+                            { value: "wide angle", label: "廣角" },
+                            { value: "macro", label: "微距" },
+                            { value: "isometric", label: "等軸測視角(2.5D)" },
+                            { value: "pov", label: "第一人稱視角" },
+                            { value: "looking at viewer", label: "直視鏡頭" },
+                            { value: "eye contact", label: "眼神接觸" }
+                        ]
+                    },
+                    {
+                        name: "鏡頭效果",
+                        tags: [
+                            { value: "depth of field", label: "景深" },
+                            { value: "bokeh", label: "背景模糊(散景)" },
+                            { value: "motion blur", label: "動態模糊" },
+                            { value: "chromatic aberration", label: "色差/故障風" },
+                            { value: "vignetting", label: "暈影(暗角)" },
+                            { value: "sharp focus", label: "清晰對焦" },
+                            { value: "soft focus", label: "柔焦" },
+                            { value: "lens flare", label: "鏡頭光暈" }
+                        ]
+                    },
+                    {
+                        name: "光影氛圍",
+                        tags: [
+                            { value: "cinematic lighting", label: "電影光效" },
+                            { value: "natural light", label: "自然光" },
+                            { value: "sunlight", label: "陽光" },
+                            { value: "moonlight", label: "月光" },
+                            { value: "starlight", label: "星光" },
+                            { value: "backlighting", label: "背光" },
+                            { value: "rim lighting", label: "輪廓光/邊緣光" },
+                            { value: "volumetric lighting", label: "體積光/丁達爾效應" },
+                            { value: "crepuscular rays", label: "神光/耶穌光" },
+                            { value: "god rays", label: "聖光" },
+                            { value: "soft lighting", label: "柔光" },
+                            { value: "hard lighting", label: "強光/硬光" },
+                            { value: "dimly lit", label: "昏暗" },
+                            { value: "glowing", label: "發光" },
+                            { value: "bioluminescence", label: "生物發光" },
+                            { value: "neon lights", label: "霓虹燈" },
+                            { value: "shadow", label: "陰影" },
+                            { value: "silhouette", label: "剪影" },
+                            { value: "ray tracing", label: "光線追蹤" }
+                        ]
+                    }
                 ]
             },
             quality: {
                 name: "畫質與風格",
-                tags: [
-                    // --- 通用畫質 ---
-                    { value: "masterpiece", label: "傑作" },
-                    { value: "best quality", label: "最佳品質" },
-                    { value: "high quality", label: "高品質" },
-                    { value: "ultra-detailed", label: "超細節" },
-                    { value: "8k", label: "8K" },
-                    { value: "4k", label: "4K" },
-                    { value: "highres", label: "高解析" },
-                    { value: "absurdres", label: "超高解析度" },
-                    { value: "incredibly absurdres", label: "極致解析度" },
-                    
-                    // --- 攝影風格 ---
-                    { value: "realistic", label: "寫實" },
-                    { value: "photorealistic", label: "照片級真實" },
-                    { value: "raw photo", label: "原始照片" },
-                    { value: "photo", label: "攝影照" },
-                    { value: "fujifilm", label: "富士底片風" },
-                    { value: "film grain", label: "底片顆粒" },
-
-                    // --- 藝術風格 ---
-                    { value: "anime style", label: "動漫風格" },
-                    { value: "illustration", label: "插畫" },
-                    { value: "game cg", label: "遊戲CG" },
-                    { value: "2d", label: "2D" },
-                    { value: "3d", label: "3D" },
-                    { value: "oil painting", label: "油畫" },
-                    { value: "watercolor", label: "水彩" },
-                    { value: "sketch", label: "素描" },
-                    { value: "ink", label: "水墨/墨繪" },
-                    { value: "line art", label: "線稿" },
-                    { value: "cel shading", label: "賽璐珞上色" },
-                    { value: "flat color", label: "平塗" },
-                    { value: "thick impasto", label: "厚塗" },
-                    { value: "impasto", label: "浮雕感" },
-                    { value: "pixel art", label: "像素風" },
-                    { value: "cyberpunk", label: "賽博龐克" },
-                    { value: "steampunk", label: "蒸氣龐克" },
-                    { value: "gothic", label: "哥德風" },
-                    { value: "retro", label: "復古風" },
-                    { value: "1980s (style)", label: "80年代風" },
-                    
-                    // --- 色調 ---
-                    { value: "monochrome", label: "單色/黑白" },
-                    { value: "greyscale", label: "灰階" },
-                    { value: "sepia", label: "懷舊褐" },
-                    { value: "aesthetic", label: "美學" },
-                    { value: "vivid colors", label: "鮮豔色彩" },
-                    { value: "pastel colors", label: "粉嫩色彩" },
-                    { value: "dark theme", label: "暗黑主題" },
-                    { value: "light theme", label: "明亮主題" },
-                    { value: "colorful", label: "色彩豐富" }
+                groups: [
+                    {
+                        name: "通用畫質",
+                        tags: [
+                            { value: "masterpiece", label: "傑作" },
+                            { value: "best quality", label: "最佳品質" },
+                            { value: "high quality", label: "高品質" },
+                            { value: "ultra-detailed", label: "超細節" },
+                            { value: "8k", label: "8K" },
+                            { value: "4k", label: "4K" },
+                            { value: "highres", label: "高解析" },
+                            { value: "absurdres", label: "超高解析度" },
+                            { value: "incredibly absurdres", label: "極致解析度" }
+                        ]
+                    },
+                    {
+                        name: "攝影風格",
+                        tags: [
+                            { value: "realistic", label: "寫實" },
+                            { value: "photorealistic", label: "照片級真實" },
+                            { value: "raw photo", label: "原始照片" },
+                            { value: "photo", label: "攝影照" },
+                            { value: "fujifilm", label: "富士底片風" },
+                            { value: "film grain", label: "底片顆粒" }
+                        ]
+                    },
+                    {
+                        name: "藝術風格",
+                        tags: [
+                            { value: "anime style", label: "動漫風格" },
+                            { value: "illustration", label: "插畫" },
+                            { value: "game cg", label: "遊戲CG" },
+                            { value: "2d", label: "2D" },
+                            { value: "3d", label: "3D" },
+                            { value: "oil painting", label: "油畫" },
+                            { value: "watercolor", label: "水彩" },
+                            { value: "sketch", label: "素描" },
+                            { value: "ink", label: "水墨/墨繪" },
+                            { value: "line art", label: "線稿" },
+                            { value: "cel shading", label: "賽璐珞上色" },
+                            { value: "flat color", label: "平塗" },
+                            { value: "thick impasto", label: "厚塗" },
+                            { value: "impasto", label: "浮雕感" },
+                            { value: "pixel art", label: "像素風" },
+                            { value: "cyberpunk", label: "賽博龐克" },
+                            { value: "steampunk", label: "蒸氣龐克" },
+                            { value: "gothic", label: "哥德風" },
+                            { value: "retro", label: "復古風" },
+                            { value: "1980s (style)", label: "80年代風" }
+                        ]
+                    },
+                    {
+                        name: "色調",
+                        tags: [
+                            { value: "monochrome", label: "單色/黑白" },
+                            { value: "greyscale", label: "灰階" },
+                            { value: "sepia", label: "懷舊褐" },
+                            { value: "aesthetic", label: "美學" },
+                            { value: "vivid colors", label: "鮮豔色彩" },
+                            { value: "pastel colors", label: "粉嫩色彩" },
+                            { value: "dark theme", label: "暗黑主題" },
+                            { value: "light theme", label: "明亮主題" },
+                            { value: "colorful", label: "色彩豐富" }
+                        ]
+                    }
                 ]
             }
         };
@@ -1278,12 +1554,14 @@
 
         // --- 狀態管理 ---
         let activeTab = "character";
-        let tagValueToLabel = {}; // 用於反查 Label (新增)
+        let activeGroupIndex = -1; // -1 表示顯示全部
+        let tagValueToLabel = {}; // 用於反查 Label
 
         const positiveInput = document.getElementById("positive-input");
         const negativeInput = document.getElementById("negative-input");
         const countDisplay = document.getElementById("positive-count");
         const tabsContainer = document.getElementById("tabs-container");
+        const subTabsContainer = document.getElementById("sub-tabs-container");
         const tagsGrid = document.getElementById("tags-grid");
         const notification = document.getElementById("notification");
         const negativeContent = document.getElementById("negative-content");
@@ -1296,31 +1574,35 @@
         function init() {
             lucide.createIcons();
             
-            // 建立 Value -> Label 對照表 (新增)
-            for (const cat in tagCategories) {
-                tagCategories[cat].tags.forEach(t => {
-                    tagValueToLabel[t.value] = t.label;
+            // 建立 Value -> Label 對照表 (需要遍歷新的結構)
+            for (const catKey in tagCategories) {
+                const cat = tagCategories[catKey];
+                cat.groups.forEach(group => {
+                    group.tags.forEach(t => {
+                        tagValueToLabel[t.value] = t.label;
+                    });
                 });
             }
 
             renderTabs();
+            renderSubTabs();
             renderTags();
             updateCount();
             renderSelectedTags();
 
-            // 監聽輸入變化以更新計數和標籤狀態
+            // 監聽輸入變化
             positiveInput.addEventListener('input', () => {
                 updateCount();
                 renderTags(); // 更新選中狀態
                 renderSelectedTags(); // 更新已選標籤區塊
-                autoResize(positiveInput); // 確保高度自動調整
+                autoResize(positiveInput);
             });
              // 初始化高度
             autoResize(positiveInput);
             autoResize(negativeInput);
         }
 
-        // --- 渲染已選標籤 (修改：顯示中文) ---
+        // --- 渲染已選標籤 ---
         function renderSelectedTags() {
             const currentTags = positiveInput.value.split(',').map(t => t.trim()).filter(t => t);
             
@@ -1332,12 +1614,9 @@
             }
 
             selectedTagsContainer.innerHTML = currentTags.map(tag => {
-                // 嘗試查找中文標籤，如果找不到則顯示原文
                 const label = tagValueToLabel[tag] || tag;
-                
-                // 注意：removeTag 仍然傳遞原始 tag 值 (英文)
                 return `
-                <button
+                <button 
                     onclick="removeTag('${tag.replace(/'/g, "\\'")}')"
                     class="group flex items-center gap-1 px-3 py-1 bg-zinc-800/80 border border-zinc-700/50 rounded-full text-xs text-zinc-300 hover:bg-red-900/30 hover:border-red-500/50 hover:text-red-300 transition-all"
                     title="點擊移除此標籤"
@@ -1347,15 +1626,12 @@
                 </button>
             `}).join('');
             
-            // 重新初始化圖標
             lucide.createIcons();
         }
 
-        // --- 移除單個標籤 ---
         function removeTag(tagToRemove) {
             let currentTags = positiveInput.value.split(',').map(t => t.trim()).filter(t => t);
             currentTags = currentTags.filter(t => t !== tagToRemove);
-            
             positiveInput.value = currentTags.join(', ');
             updateCount();
             renderTags();
@@ -1363,13 +1639,11 @@
             autoResize(positiveInput);
         }
 
-        // --- 折疊負面提示詞 ---
         function toggleNegative() {
             const isHidden = negativeContent.classList.contains('hidden');
             if (isHidden) {
                 negativeContent.classList.remove('hidden');
                 negativeChevron.style.transform = 'rotate(180deg)';
-                // 展開後重新計算高度
                 autoResize(negativeInput);
             } else {
                 negativeContent.classList.add('hidden');
@@ -1377,16 +1651,16 @@
             }
         }
 
-        // --- 渲染 Tabs ---
+        // --- 渲染大分類 Tabs ---
         function renderTabs() {
             tabsContainer.innerHTML = Object.keys(tagCategories).map(key => {
                 const isActive = activeTab === key;
-                const activeClasses = "border-blue-500 text-blue-400 bg-zinc-800/50";
+                const activeClasses = "border-blue-500 text-blue-400 bg-zinc-800";
                 const inactiveClasses = "border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/30";
                 return `
-                    <button
+                    <button 
                         onclick="switchTab('${key}')"
-                        class="px-5 py-4 text-sm font-medium whitespace-nowrap transition-all border-b-2 ${isActive ? activeClasses : inactiveClasses}"
+                        class="px-5 py-4 text-sm font-medium whitespace-nowrap transition-all border-b-2 outline-none focus:outline-none ${isActive ? activeClasses : inactiveClasses}"
                     >
                         ${tagCategories[key].name}
                     </button>
@@ -1394,28 +1668,88 @@
             }).join('');
         }
 
-        // --- 切換 Tab ---
+        // --- 渲染子分類 Tabs ---
+        function renderSubTabs() {
+            const groups = tagCategories[activeTab].groups;
+            
+            // "全部" 選項
+            const allActive = activeGroupIndex === -1;
+            const allBtnClass = allActive 
+                ? "bg-blue-600 text-white border-blue-500" 
+                : "bg-zinc-800 text-zinc-400 border-zinc-700 hover:bg-zinc-700 hover:text-zinc-200";
+
+            let html = `
+                <button 
+                    onclick="switchSubTab(-1)"
+                    class="px-3 py-1.5 text-xs rounded-full border transition-all whitespace-nowrap ${allBtnClass}"
+                >
+                    全部
+                </button>
+            `;
+
+            // 其他群組選項
+            html += groups.map((group, index) => {
+                const isActive = activeGroupIndex === index;
+                const activeClasses = "bg-blue-600 text-white border-blue-500 shadow-[0_0_10px_rgba(37,99,235,0.3)]";
+                const inactiveClasses = "bg-zinc-800 text-zinc-400 border-zinc-700 hover:bg-zinc-700 hover:text-zinc-200";
+                return `
+                    <button 
+                        onclick="switchSubTab(${index})"
+                        class="px-3 py-1.5 text-xs rounded-full border transition-all whitespace-nowrap ${isActive ? activeClasses : inactiveClasses}"
+                    >
+                        ${group.name}
+                    </button>
+                `;
+            }).join('');
+
+            subTabsContainer.innerHTML = html;
+        }
+
+        // --- 切換大分類 ---
         function switchTab(key) {
             activeTab = key;
+            activeGroupIndex = -1; // 重置為顯示全部
             renderTabs();
+            renderSubTabs();
+            renderTags();
+        }
+
+        // --- 切換子分類 ---
+        function switchSubTab(index) {
+            activeGroupIndex = index;
+            renderSubTabs();
             renderTags();
         }
 
         // --- 渲染標籤 ---
         function renderTags() {
             const currentTags = positiveInput.value.split(',').map(t => t.trim());
-            const tags = tagCategories[activeTab].tags;
+            const cat = tagCategories[activeTab];
+            let tagsToRender = [];
 
-            tagsGrid.innerHTML = tags.map(tag => {
+            // 根據 activeGroupIndex 決定顯示哪些標籤
+            if (activeGroupIndex === -1) {
+                // 顯示所有群組 (加上小標題區隔會更好，但為保持格狀整齊，這裡直接平鋪所有標籤)
+                // 為了讓視覺上知道分類，我們可以簡單地按順序加入
+                cat.groups.forEach(g => {
+                    tagsToRender = tagsToRender.concat(g.tags);
+                });
+            } else {
+                // 顯示特定群組
+                tagsToRender = cat.groups[activeGroupIndex].tags;
+            }
+
+            // 渲染邏輯
+            tagsGrid.innerHTML = tagsToRender.map(tag => {
                 const isSelected = currentTags.includes(tag.value);
-                const selectedClasses = "bg-blue-600/20 border-blue-500 text-blue-300 shadow-[0_0_10px_rgba(59,130,246,0.2)]";
-                const unselectedClasses = "bg-zinc-800 border-zinc-700 text-zinc-400 hover:bg-zinc-700 hover:border-zinc-500 hover:text-zinc-200";
+                const selectedClasses = "bg-blue-600/20 border-blue-500 text-blue-300 shadow-[0_0_10px_rgba(59,130,246,0.2)] transform scale-105";
+                const unselectedClasses = "bg-zinc-800 border-zinc-700 text-zinc-400 hover:bg-zinc-700 hover:border-zinc-500 hover:text-zinc-200 hover:scale-105";
                 const subTextClass = isSelected ? "text-blue-200" : "text-zinc-500 group-hover:text-zinc-400";
 
                 return `
-                    <button
+                    <button 
                         onclick="toggleTag('${tag.value}')"
-                        class="px-3 py-2 rounded-lg text-sm transition-all border flex flex-col items-center justify-center min-w-[80px] group ${isSelected ? selectedClasses : unselectedClasses}"
+                        class="px-3 py-2 rounded-lg text-sm transition-all duration-200 border flex flex-col items-center justify-center min-w-[80px] group ${isSelected ? selectedClasses : unselectedClasses}"
                     >
                         <span class="font-bold text-zinc-100 mb-0.5 pointer-events-none">${tag.label}</span>
                         <span class="text-xs font-mono opacity-60 pointer-events-none ${subTextClass}">
@@ -1431,18 +1765,16 @@
             let currentTags = positiveInput.value.split(',').map(t => t.trim()).filter(t => t);
             
             if (currentTags.includes(tagValue)) {
-                // 移除
                 currentTags = currentTags.filter(t => t !== tagValue);
             } else {
-                // 新增
                 currentTags.push(tagValue);
             }
 
             positiveInput.value = currentTags.join(', ');
             updateCount();
             renderTags();
-            renderSelectedTags(); // 同步更新已選標籤區塊
-            autoResize(positiveInput); // 更新高度
+            renderSelectedTags();
+            autoResize(positiveInput);
         }
 
         // --- 輔助功能 ---
