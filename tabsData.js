@@ -540,7 +540,14 @@ const tagCategories = {
                             { value: "topless", label: "上空/露胸" },
                             { value: "bottomless", label: "下空/無內褲" },
                             { value: "disheveled hair", label: "頭髮凌亂" },
-                            { value: "sweaty", label: "大汗淋漓" }
+                            { value: "sweaty", label: "大汗淋漓" },
+                            { value: "mostly nude", label: "幾近全裸" },
+                            { value: "partially nude", label: "部分裸露" },
+                            { value: "wearing only socks", label: "只穿襪子" },
+                            { value: "wearing only shoes", label: "只穿鞋子" },
+                            { value: "flustered", label: "慌亂/羞澀" },
+                            { value: "heavy breathing", label: "喘氣" },
+                            { value: "steam", label: "蒸氣/霧氣(遮擋用)" }
                         ]
                     },
                     {
@@ -558,7 +565,8 @@ const tagCategories = {
                             { value: "erect nipples", label: "乳頭硬挺" },
                             { value: "areola", label: "乳暈" },
                             { value: "pubic hair", label: "陰毛" },
-                            { value: "shaven", label: "白虎/無毛" }
+                            { value: "shaven", label: "白虎/無毛" },
+                            { value: "inverted nipples", label: "乳頭內陷" }
                         ]
                     },
                     {
@@ -590,7 +598,8 @@ const tagCategories = {
                             { value: "deepthroat", label: "深喉嚨" },
                             { value: "face fucking", label: "口交(動態)" },
                             { value: "irrumatio", label: "口交(強制/深喉)" },
-                            { value: "open mouth", label: "張嘴等待" }
+                            { value: "open mouth", label: "張嘴等待" },
+                            { value: "cheek bulging", label: "口交(臉頰鼓起)" }
                         ]
                     },
                     {
@@ -610,7 +619,9 @@ const tagCategories = {
                             { value: "straddling", label: "跨坐" },
                             { value: "legs over head", label: "M字開腳(抬腿)" },
                             { value: "69", label: "69式" },
-                            { value: "from behind", label: "後入式" }
+                            { value: "from behind", label: "後入式" },
+                            { value: "carrying", label: "火車便當/搬運" },
+                            { value: "against wall", label: "靠牆做" }
                         ]
                     },
                     {
@@ -627,7 +638,13 @@ const tagCategories = {
                             { value: "condom", label: "保險套" },
                             { value: "condom in mouth", label: "嘴含保險套" },
                             { value: "pillow humping", label: "枕頭摩擦" },
-                            { value: "table humping", label: "桌腳摩擦" }
+                            { value: "table humping", label: "桌腳摩擦" },
+                            { value: "anal plug", label: "肛塞" },
+                            { value: "anal beads", label: "拉珠" },
+                            { value: "holding dildo", label: "手持假陽具" },
+                            { value: "inserting", label: "插入中(手指/道具)" },
+                            { value: "vibrator on nipples", label: "按摩棒玩乳頭" },
+                            { value: "used condom", label: "用過的保險套" }
                         ]
                     },
                     {
@@ -647,7 +664,14 @@ const tagCategories = {
                             { value: "tentacles", label: "觸手" },
                             { value: "femdom", label: "女帝/女攻" },
                             { value: "public sex", label: "野外/公眾性交" },
-                            { value: "exhibitionism", label: "露出/暴露" }
+                            { value: "exhibitionism", label: "露出/暴露" },
+                            { value: "handcuffs", label: "手銬" },
+                            { value: "arms tied", label: "雙手綑綁" },
+                            { value: "legs tied", label: "雙腿綑綁" },
+                            { value: "pet play", label: "寵物玩法" },
+                            { value: "sleeping", label: "睡姦/趁睡" },
+                            { value: "drunk", label: "酒醉" },
+                            { value: "hypnosis", label: "催眠" }
                         ]
                     },
                     {
@@ -666,7 +690,14 @@ const tagCategories = {
                             { value: "squirting", label: "潮吹" },
                             { value: "pussy juice", label: "愛液" },
                             { value: "saliva", label: "唾液" },
-                            { value: "saliva trail", label: "唾液拉絲" }
+                            { value: "saliva trail", label: "唾液拉絲" },
+                            { value: "ejaculation", label: "射精瞬間" },
+                            { value: "facial", label: "顏射(Facial)" },
+                            { value: "cum pool", label: "精液灘" },
+                            { value: "cum inside", label: "體內充滿精液" },
+                            { value: "cum on hair", label: "射在頭髮" },
+                            { value: "cum on clothes", label: "射在衣服" },
+                            { value: "excessive cum", label: "大量精液" }
                         ]
                     },
                     {
@@ -676,7 +707,11 @@ const tagCategories = {
                             { value: "cross-section", label: "斷面圖" },
                             { value: "internal view", label: "體內視角" },
                             { value: "pov", label: "第一人稱視角" },
-                            { value: "looking back", label: "回頭看" }
+                            { value: "looking back", label: "回頭看" },
+                            { value: "penis focus", label: "聚焦陰莖" },
+                            { value: "pussy focus", label: "聚焦小穴" },
+                            { value: "breast focus", label: "聚焦胸部" },
+                            { value: "ass focus", label: "聚焦屁股" }
                         ]
                     },
                     {
@@ -686,7 +721,13 @@ const tagCategories = {
                             { value: "panties aside", label: "撥開內褲" },
                             { value: "pulling down panties", label: "脫內褲" },
                             { value: "half-removed clothes", label: "衣衫半解" },
-                            { value: "clothes lift", label: "掀起衣服" }
+                            { value: "clothes lift", label: "掀起衣服" },
+                            { value: "undressing", label: "脫衣中" },
+                            { value: "shirt lift", label: "掀上衣" },
+                            { value: "dress lift", label: "掀連身裙" },
+                            { value: "bra lift", label: "掀內衣" },
+                            { value: "open clothes", label: "衣服敞開" },
+                            { value: "panties around one leg", label: "內褲掛單腿" }
                         ]
                     }
                 ]
@@ -793,8 +834,7 @@ const tagCategories = {
                             { value: "cooking", label: "做飯" },
                             { value: "cleaning", label: "打掃" },
                             { value: "selfie", label: "自拍" },
-                            { value: "lifting skirt", label: "掀裙子" },
-                            { value: "undressing", label: "脫衣" }
+                            { value: "lifting skirt", label: "掀裙子" }
                         ]
                     },
                     {
