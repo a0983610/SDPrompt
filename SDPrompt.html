@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SD 提示詞生成器 (Magic版)</title>
+    <title>SD 提示詞生成器 (分區版)</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
@@ -41,7 +41,7 @@
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <h1 class="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-400 to-pink-500 bg-clip-text text-transparent flex items-center gap-2">
                 <i data-lucide="sparkles" class="text-pink-500"></i>
-                SD 提示詞生成器 <span class="text-sm font-normal text-zinc-500 ml-2 border border-zinc-700 rounded px-2 py-0.5">v3.9 Magic版</span>
+                SD 提示詞生成器 <span class="text-sm font-normal text-zinc-500 ml-2 border border-zinc-700 rounded px-2 py-0.5">v3.9.5 分區優化</span>
             </h1>
             <div class="text-xs text-zinc-500 font-mono hidden md:block">Optimized for Workflow</div>
         </div>
@@ -58,7 +58,7 @@
                         <i data-lucide="settings" width="16" height="16"></i> 正面提示詞
                     </label>
                     <div class="flex gap-2 items-center">
-                        <!-- Magic Button (新增) -->
+                        <!-- Magic Button -->
                         <button onclick="addMagicPrompt()" class="p-2 text-zinc-400 hover:text-purple-400 hover:bg-zinc-800 rounded-lg transition-all group/magic" title="一鍵加入高品質起手式 (masterpiece, best quality, etc.)">
                             <div class="flex items-center gap-1">
                                 <i data-lucide="wand-2" width="18" height="18"></i>
@@ -387,6 +387,38 @@
                         ]
                     },
                     {
+                        name: "髮色",
+                        tags: [
+                            //一般髮色
+                            { value: "black hair", label: "黑髮" },
+                            { value: "brown hair", label: "棕髮" },
+                            { value: "dark brown hair", label: "深棕髮" },
+                            { value: "light brown hair", label: "淺棕髮" },
+                            { value: "blonde hair", label: "金髮" },
+                            { value: "platinum blonde hair", label: "白金髮" },
+                            { value: "dirty blonde hair", label: "暗金髮" },
+                            { value: "silver hair", label: "銀髮" },
+                            { value: "white hair", label: "白髮" },
+                            { value: "grey hair", label: "灰髮" },
+                            { value: "red hair", label: "紅髮" },
+                            { value: "ginger hair", label: "橘紅髮" },
+                            { value: "auburn hair", label: "赤褐髮" },
+                            //特殊髮色
+                            { value: "orange hair", label: "橘髮" },
+                            { value: "pink hair", label: "粉髮" },
+                            { value: "purple hair", label: "紫髮" },
+                            { value: "lavender hair", label: "薰衣草紫" },
+                            { value: "blue hair", label: "藍髮" },
+                            { value: "dark blue hair", label: "深藍髮" },
+                            { value: "light blue hair", label: "淺藍髮" },
+                            { value: "cyan hair", label: "青色髮" },
+                            { value: "aqua hair", label: "水藍髮" },
+                            { value: "green hair", label: "綠髮" },
+                            { value: "dark green hair", label: "深綠髮" },
+                            { value: "turquoise hair", label: "綠松石色" }
+                        ]
+                    },
+                    {
                         name: "綁髮",
                         tags: [
                             { value: "ponytail", label: "馬尾" },
@@ -481,38 +513,6 @@
                             { value: "hair ears", label: "頭髮獸耳(貓耳髮)" },
                             { value: "hair tucked behind ears", label: "耳後髮/露耳" },
                             { value: "hair over shoulder", label: "披肩髮(側邊)" }
-                        ]
-                    },
-                    {
-                        name: "髮色",
-                        tags: [
-                            //一般髮色
-                            { value: "black hair", label: "黑髮" },
-                            { value: "brown hair", label: "棕髮" },
-                            { value: "dark brown hair", label: "深棕髮" },
-                            { value: "light brown hair", label: "淺棕髮" },
-                            { value: "blonde hair", label: "金髮" },
-                            { value: "platinum blonde hair", label: "白金髮" },
-                            { value: "dirty blonde hair", label: "暗金髮" },
-                            { value: "silver hair", label: "銀髮" },
-                            { value: "white hair", label: "白髮" },
-                            { value: "grey hair", label: "灰髮" },
-                            { value: "red hair", label: "紅髮" },
-                            { value: "ginger hair", label: "橘紅髮" },
-                            { value: "auburn hair", label: "赤褐髮" },
-                            //特殊髮色
-                            { value: "orange hair", label: "橘髮" },
-                            { value: "pink hair", label: "粉髮" },
-                            { value: "purple hair", label: "紫髮" },
-                            { value: "lavender hair", label: "薰衣草紫" },
-                            { value: "blue hair", label: "藍髮" },
-                            { value: "dark blue hair", label: "深藍髮" },
-                            { value: "light blue hair", label: "淺藍髮" },
-                            { value: "cyan hair", label: "青色髮" },
-                            { value: "aqua hair", label: "水藍髮" },
-                            { value: "green hair", label: "綠髮" },
-                            { value: "dark green hair", label: "深綠髮" },
-                            { value: "turquoise hair", label: "綠松石色" }
                         ]
                     },
                     {
@@ -1827,7 +1827,7 @@
 
         // --- Magic Button Logic ---
         function addMagicPrompt() {
-            const magicTags = ["masterpiece", "best quality", "highres", "8k"];
+            const magicTags = ["masterpiece", "best quality", "highres", "ultra-detailed", "8k"];
             let currentTags = positiveInput.value.split(',').map(t => t.trim()).filter(t => t);
             
             // 找出尚未存在的 magic tags
@@ -2024,39 +2024,55 @@
         function renderTags() {
             const currentTags = positiveInput.value.split(',').map(t => t.trim());
             const cat = tagCategories[activeTab];
-            let tagsToRender = [];
+            let html = '';
 
             // 根據 activeGroupIndex 決定顯示哪些標籤
             if (activeGroupIndex === -1) {
-                // 顯示所有群組 (加上小標題區隔會更好，但為保持格狀整齊，這裡直接平鋪所有標籤)
-                // 為了讓視覺上知道分類，我們可以簡單地按順序加入
-                cat.groups.forEach(g => {
-                    tagsToRender = tagsToRender.concat(g.tags);
+                // 顯示所有群組，並以分區方式顯示
+                cat.groups.forEach((group, index) => {
+                    // 加入群組標題分隔線
+                    const mt = index === 0 ? '' : 'mt-6';
+                    html += `
+                        <div class="w-full flex items-center gap-2 ${mt} mb-2">
+                            <div class="h-px bg-zinc-700/50 flex-grow"></div>
+                            <span class="text-xs text-zinc-500 font-medium uppercase tracking-wider px-2">${group.name}</span>
+                            <div class="h-px bg-zinc-700/50 flex-grow"></div>
+                        </div>
+                    `;
+                    // 渲染該群組的標籤
+                    group.tags.forEach(tag => {
+                        html += createTagButtonHTML(tag, currentTags);
+                    });
                 });
             } else {
                 // 顯示特定群組
-                tagsToRender = cat.groups[activeGroupIndex].tags;
+                const group = cat.groups[activeGroupIndex];
+                group.tags.forEach(tag => {
+                    html += createTagButtonHTML(tag, currentTags);
+                });
             }
 
-            // 渲染邏輯
-            tagsGrid.innerHTML = tagsToRender.map(tag => {
-                const isSelected = currentTags.includes(tag.value);
-                const selectedClasses = "bg-blue-600/20 border-blue-500 text-blue-300 shadow-[0_0_10px_rgba(59,130,246,0.2)] transform scale-105";
-                const unselectedClasses = "bg-zinc-800 border-zinc-700 text-zinc-400 hover:bg-zinc-700 hover:border-zinc-500 hover:text-zinc-200 hover:scale-105";
-                const subTextClass = isSelected ? "text-blue-200" : "text-zinc-500 group-hover:text-zinc-400";
+            tagsGrid.innerHTML = html;
+        }
 
-                return `
-                    <button 
-                        onclick="toggleTag('${tag.value}')"
-                        class="px-3 py-2 rounded-lg text-sm transition-all duration-200 border flex flex-col items-center justify-center min-w-[80px] group ${isSelected ? selectedClasses : unselectedClasses}"
-                    >
-                        <span class="font-bold text-zinc-100 mb-0.5 pointer-events-none">${tag.label}</span>
-                        <span class="text-xs font-mono opacity-60 pointer-events-none ${subTextClass}">
-                            ${tag.value}
-                        </span>
-                    </button>
-                `;
-            }).join('');
+        // 輔助函數：生成標籤按鈕 HTML
+        function createTagButtonHTML(tag, currentTags) {
+            const isSelected = currentTags.includes(tag.value);
+            const selectedClasses = "bg-blue-600/20 border-blue-500 text-blue-300 shadow-[0_0_10px_rgba(59,130,246,0.2)] transform scale-105";
+            const unselectedClasses = "bg-zinc-800 border-zinc-700 text-zinc-400 hover:bg-zinc-700 hover:border-zinc-500 hover:text-zinc-200 hover:scale-105";
+            const subTextClass = isSelected ? "text-blue-200" : "text-zinc-500 group-hover:text-zinc-400";
+
+            return `
+                <button 
+                    onclick="toggleTag('${tag.value}')"
+                    class="px-3 py-2 rounded-lg text-sm transition-all duration-200 border flex flex-col items-center justify-center min-w-[80px] group ${isSelected ? selectedClasses : unselectedClasses}"
+                >
+                    <span class="font-bold text-zinc-100 mb-0.5 pointer-events-none">${tag.label}</span>
+                    <span class="text-xs font-mono opacity-60 pointer-events-none ${subTextClass}">
+                        ${tag.value}
+                    </span>
+                </button>
+            `;
         }
 
         // --- 處理標籤點擊 ---
