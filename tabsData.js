@@ -23,45 +23,93 @@ const tagCategories = {
                             { value: "mature female", label: "熟女" },
                             { value: "milf", label: "人妻" },
                             { value: "gyaru", label: "辣妹" },
-                            { value: "tomboy", label: "假小子" }
+                            { value: "tomboy", label: "假小子" },
+                            { value: "grandmother", label: "老奶奶" },
+                            { value: "widow", label: "未亡人/寡婦" },
+                            { value: "ojousama", label: "千金大小姐" },
+                            { value: "yamato nadeshiko", label: "大和撫子" },
+                            { value: "pregnant", label: "孕婦" },
                         ]
                     },
                     {
                         name: "職業與身分",
                         tags: [
+                            // --- 校園與日常 ---
                             { value: "student", label: "學生" },
                             { value: "schoolgirl", label: "女高中生(JK)" },
-                            { value: "maid", label: "女僕" },
-                            { value: "nurse", label: "護士" },
-                            { value: "police", label: "女警" },
-                            { value: "soldier", label: "軍人" },
-                            { value: "office lady", label: "OL" },
-                            { value: "flight attendant", label: "空服員" },
                             { value: "teacher", label: "老師" },
-                            { value: "doctor", label: "醫生" },
-                            { value: "scientist", label: "科學家" },
+                            { value: "class president", label: "班長" },
+                            { value: "delinquent", label: "不良少女" },
+                            { value: "office lady", label: "OL" },
+                            { value: "secretary", label: "秘書" },
+                            { value: "librarian", label: "圖書管理員" },
+                            { value: "housewife", label: "家庭主婦" },
+
+                            // --- 服務與制服 ---
+                            { value: "maid", label: "女僕" },
                             { value: "waitress", label: "服務生" },
                             { value: "bartender", label: "調酒師" },
+                            { value: "barista", label: "咖啡師" },
                             { value: "chef", label: "廚師" },
+                            { value: "flight attendant", label: "空服員" },
+                            { value: "nurse", label: "護士" },
+                            { value: "doctor", label: "醫生" },
+                            { value: "police", label: "女警" },
+                            { value: "firefighter", label: "消防員" },
+                            { value: "scientist", label: "科學家" },
+                            { value: "mechanic", label: "技師/黑手" },
+                            { value: "florist", label: "花店店員" },
+
+                            // --- 表演與娛樂 ---
                             { value: "idol", label: "偶像" },
                             { value: "streamer", label: "實況主" },
-                            { value: "nun", label: "修女" },
-                            { value: "shrine maiden", label: "巫女" },
-                            { value: "magical girl", label: "魔法少女" },
-                            { value: "witch", label: "魔女" },
-                            { value: "princess", label: "公主" },
-                            { value: "queen", label: "女王" },
-                            { value: "goddess", label: "女神" },
-                            { value: "knight", label: "騎士" },
-                            { value: "kunoichi", label: "女忍者" },
-                            { value: "samurai", label: "武士" },
-                            { value: "pirate", label: "海盜" },
-                            { value: "cowgirl", label: "牛仔" },
+                            { value: "bunny girl", label: "兔女郎(職業)" },
+                            { value: "race queen", label: "賽車女郎" },
                             { value: "cheerleader", label: "啦啦隊" },
                             { value: "ballerina", label: "芭蕾舞者" },
                             { value: "dancer", label: "舞者" },
+                            { value: "model", label: "模特兒" },
+                            { value: "geisha", label: "藝妓" },
+                            { value: "circus", label: "馬戲團員" },
+
+                            // --- 奇幻與戰鬥 (RPG) ---
+                            { value: "soldier", label: "軍人" },
+                            { value: "knight", label: "騎士" },
+                            { value: "paladin", label: "聖騎士" },
+                            { value: "warrior", label: "戰士" },
+                            { value: "samurai", label: "武士" },
+                            { value: "kunoichi", label: "女忍者" },
+                            { value: "ninja", label: "忍者" },
+                            { value: "assassin", label: "刺客" },
+                            { value: "thief", label: "盜賊" },
+                            { value: "archer", label: "弓箭手" },
+                            { value: "mage", label: "法師" },
+                            { value: "witch", label: "魔女" },
+                            { value: "sorceress", label: "術士/女巫" },
+                            { value: "necromancer", label: "死靈法師" },
+                            { value: "healer", label: "治療師" },
+                            { value: "priestess", label: "女祭司/牧師" },
+                            { value: "nun", label: "修女" },
+                            { value: "shrine maiden", label: "巫女" },
+                            { value: "monk", label: "武僧" },
+                            { value: "magical girl", label: "魔法少女" },
+                            { value: "adventurer", label: "冒險者" },
+                            { value: "hero", label: "勇者" },
+                            { value: "dark knight", label: "黑暗騎士" },
+                            { value: "pirate", label: "海盜" },
+                            { value: "cowgirl", label: "牛仔" },
+
+                            // --- 貴族與其他 ---
+                            { value: "princess", label: "公主" },
+                            { value: "queen", label: "女王" },
+                            { value: "empress", label: "女皇" },
+                            { value: "goddess", label: "女神" },
+
+                            // --- 運動 ---
                             { value: "athlete", label: "運動員" },
-                            { value: "racing queen", label: "賽車女郎" }
+                            { value: "swimmer", label: "游泳選手" },
+                            { value: "gymnast", label: "體操選手" },
+                            { value: "tennis player", label: "網球選手" }
                         ]
                     },
                     {
@@ -88,7 +136,21 @@ const tagCategories = {
                             { value: "monster girl", label: "魔物娘" },
                             { value: "alien", label: "外星人" },
                             { value: "orc", label: "半獸人" },
-                            { value: "goblin", label: "哥布林" }
+                            { value: "goblin", label: "哥布林" },
+                            { value: "dwarf", label: "矮人" },
+                            { value: "halfling", label: "哈比人/半身人" },
+                            { value: "dryad", label: "樹精" },
+                            { value: "plant girl", label: "植物娘" },
+                            { value: "dullahan", label: "無頭騎士" },
+                            { value: "cyclops", label: "獨眼娘" },
+                            { value: "minotaur", label: "牛頭人(米諾陶)" },
+                            { value: "medusa", label: "美杜莎" },
+                            { value: "siren", label: "海妖/塞壬" },
+                            { value: "yuki-onna", label: "雪女" },
+                            { value: "tengu", label: "天狗" },
+                            { value: "holstaurus", label: "乳牛娘(魔物)" },
+                            { value: "drider", label: "半蛛人(卓爾)" },
+                            { value: "undead", label: "不死族" }
                         ]
                     },
                     {
@@ -117,7 +179,12 @@ const tagCategories = {
                             { value: "robot", label: "機器人" },
                             { value: "cyborg", label: "賽博格" },
                             { value: "mecha musume", label: "機甲娘" },
-                            { value: "hologram", label: "全息影像" }
+                            { value: "hologram", label: "全息影像" },
+                            { value: "gynoid", label: "女性機器人" },
+                            { value: "automaton", label: "自動人偶" },
+                            { value: "doll joints", label: "球體關節" },
+                            { value: "mechanical parts", label: "機械部件" },
+                            { value: "artificial intelligence", label: "AI人工智慧" }
                         ]
                     }
                 ]
@@ -133,7 +200,11 @@ const tagCategories = {
                             { value: "long hair", label: "長髮" },
                             { value: "very long hair", label: "超長髮" },
                             { value: "absurdly long hair", label: "極長髮" },
-                            { value: "floor-length hair", label: "及地長髮" }
+                            { value: "floor-length hair", label: "及地長髮" },
+                            { value: "chin-length hair", label: "及下巴短髮" },
+                            { value: "shoulder-length hair", label: "及肩髮" },
+                            { value: "waist-length hair", label: "及腰長髮" },
+                            { value: "hip-length hair", label: "及臀長髮" }
                         ]
                     },
                     {
@@ -150,7 +221,14 @@ const tagCategories = {
                             { value: "single hair bun", label: "單丸子" },
                             { value: "double bun", label: "雙丸子" },
                             { value: "braided bun", label: "編織丸子頭" },
-                            { value: "updo", label: "盤髮" }
+                            { value: "updo", label: "盤髮" },
+                            { value: "half updo", label: "公主頭/半盤髮" },
+                            { value: "folded ponytail", label: "折疊馬尾" },
+                            { value: "pigtails", label: "幼女雙辮/雙馬尾" },
+                            { value: "twin drills", label: "雙鑽頭捲" },
+                            { value: "cone hair bun", label: "錐形丸子頭" },
+                            { value: "side bun", label: "側丸子頭" },
+                            { value: "hair rings", label: "髮圈造型(像包包頭)" }
                         ]
                     },
                     {
@@ -183,7 +261,13 @@ const tagCategories = {
                             { value: "drill hair", label: "鑽頭捲" },
                             { value: "spiky hair", label: "刺蝟頭" },
                             { value: "messy hair", label: "凌亂髮" },
-                            { value: "bed head", label: "剛睡醒頭" }
+                            { value: "bed head", label: "剛睡醒頭" },
+                            { value: "ringlets", label: "螺旋捲" },
+                            { value: "afro", label: "爆炸頭" },
+                            { value: "frizzy hair", label: "毛躁髮" },
+                            { value: "windblown hair", label: "風吹髮" },
+                            { value: "disheveled hair", label: "蓬亂/衣冠不整" },
+                            { value: "big hair", label: "蓬蓬頭" }
                         ]
                     },
                     {
@@ -194,7 +278,13 @@ const tagCategories = {
                             { value: "swept bangs", label: "旁分瀏海" },
                             { value: "crossed bangs", label: "交叉瀏海" },
                             { value: "hair between eyes", label: "眼間髮" },
-                            { value: "forehead", label: "露額頭" }
+                            { value: "forehead", label: "露額頭" },
+                            { value: "asymmetrical bangs", label: "不對稱瀏海" },
+                            { value: "parted bangs", label: "中分瀏海" },
+                            { value: "long bangs", label: "長瀏海" },
+                            { value: "pinched bangs", label: "M字/夾捏瀏海" },
+                            { value: "hair over eyebrows", label: "過眉瀏海" },
+                            { value: "hiding eyebrows", label: "遮眉" }
                         ]
                     },
                     {
@@ -206,35 +296,44 @@ const tagCategories = {
                             { value: "hair intake", label: "收束髮" },
                             { value: "hair over one eye", label: "單眼遮蓋" },
                             { value: "hair over eyes", label: "遮眼(H)" },
-                            { value: "hair wings", label: "髮翼" }
+                            { value: "hair wings", label: "髮翼" },
+                            { value: "heart ahoge", label: "愛心呆毛" },
+                            { value: "huge ahoge", label: "巨大呆毛" },
+                            { value: "hair ears", label: "頭髮獸耳(貓耳髮)" },
+                            { value: "hair tucked behind ears", label: "耳後髮/露耳" },
+                            { value: "hair over shoulder", label: "披肩髮(側邊)" }
                         ]
                     },
                     {
-                        name: "一般髮色",
+                        name: "髮色",
                         tags: [
+                            //一般髮色
                             { value: "black hair", label: "黑髮" },
                             { value: "brown hair", label: "棕髮" },
+                            { value: "dark brown hair", label: "深棕髮" },
                             { value: "light brown hair", label: "淺棕髮" },
                             { value: "blonde hair", label: "金髮" },
                             { value: "platinum blonde hair", label: "白金髮" },
+                            { value: "dirty blonde hair", label: "暗金髮" },
                             { value: "silver hair", label: "銀髮" },
                             { value: "white hair", label: "白髮" },
                             { value: "grey hair", label: "灰髮" },
                             { value: "red hair", label: "紅髮" },
-                            { value: "ginger hair", label: "橘紅髮" }
-                        ]
-                    },
-                    {
-                        name: "特殊髮色",
-                        tags: [
+                            { value: "ginger hair", label: "橘紅髮" },
+                            { value: "auburn hair", label: "赤褐髮" },
+                            //特殊髮色
                             { value: "orange hair", label: "橘髮" },
                             { value: "pink hair", label: "粉髮" },
                             { value: "purple hair", label: "紫髮" },
                             { value: "lavender hair", label: "薰衣草紫" },
                             { value: "blue hair", label: "藍髮" },
+                            { value: "dark blue hair", label: "深藍髮" },
                             { value: "light blue hair", label: "淺藍髮" },
+                            { value: "cyan hair", label: "青色髮" },
                             { value: "aqua hair", label: "水藍髮" },
-                            { value: "green hair", label: "綠髮" }
+                            { value: "green hair", label: "綠髮" },
+                            { value: "dark green hair", label: "深綠髮" },
+                            { value: "turquoise hair", label: "綠松石色" }
                         ]
                     },
                     {
@@ -244,7 +343,12 @@ const tagCategories = {
                             { value: "multicolored hair", label: "多彩髮色" },
                             { value: "two-tone hair", label: "雙色髮" },
                             { value: "streaked hair", label: "挑染" },
-                            { value: "rainbow hair", label: "彩虹髮" }
+                            { value: "rainbow hair", label: "彩虹髮" },
+                            { value: "split-color hair", label: "對半染" },
+                            { value: "colored inner hair", label: "內層挑染/掛耳染" },
+                            { value: "colored tips", label: "髮尾挑染" },
+                            { value: "colored roots", label: "髮根染/布丁頭" },
+                            { value: "dye", label: "染色" }
                         ]
                     },
                     {
@@ -252,7 +356,13 @@ const tagCategories = {
                         tags: [
                             { value: "floating hair", label: "漂浮髮" },
                             { value: "wet hair", label: "濕髮" },
-                            { value: "shiny hair", label: "光澤髮" }
+                            { value: "shiny hair", label: "光澤髮" },
+                            { value: "luminous hair", label: "發光髮" },
+                            { value: "translucent hair", label: "半透明髮" },
+                            { value: "hair flowing", label: "飄逸髮" },
+                            { value: "hair spread out", label: "散開的頭髮(躺姿)" },
+                            { value: "greasy hair", label: "油膩髮" },
+                            { value: "sparkling hair", label: "閃耀髮" }
                         ]
                     }
                 ]
@@ -279,7 +389,13 @@ const tagCategories = {
                             { value: "thick", label: "厚實/肉感" },
                             { value: "soft body", label: "柔軟身軀" },
                             { value: "hourglass figure", label: "沙漏型身材" },
-                            { value: "mature body", label: "成熟身軀" }
+                            { value: "mature body", label: "成熟身軀" },
+                            { value: "slender", label: "修長/纖細" },
+                            { value: "lanky", label: "瘦長" },
+                            { value: "stout", label: "矮胖/結實" },
+                            { value: "curvaceous", label: "曲線美(強烈)" },
+                            { value: "pregnant", label: "懷孕" },
+                            { value: "body builder", label: "健身狂/健美身材" }
                         ]
                     },
                     {
@@ -294,7 +410,50 @@ const tagCategories = {
                             { value: "cleavage", label: "乳溝" },
                             { value: "sideboob", label: "側乳" },
                             { value: "underboob", label: "南半球" },
-                            { value: "bouncing breasts", label: "晃動的胸部" }
+                            { value: "bouncing breasts", label: "晃動的胸部" },
+                            { value: "perky breasts", label: "挺拔的胸部" },
+                            { value: "saggy breasts", label: "下垂的胸部" },
+                            { value: "asymmetrical breasts", label: "大小奶" },
+                            { value: "nipples", label: "乳頭" },
+                            { value: "puffy nipples", label: "突起的乳頭" },
+                            { value: "areola", label: "乳暈" }
+                        ]
+                    },
+                    {
+                        name: "臀部與下半身",
+                        tags: [
+                            { value: "wide hips", label: "寬臀/安產型" },
+                            { value: "narrow hips", label: "窄臀" },
+                            { value: "big ass", label: "大屁股" },
+                            { value: "round ass", label: "圓臀" },
+                            { value: "bubble butt", label: "翹臀" },
+                            { value: "flat ass", label: "扁臀" },
+                            { value: "thick thighs", label: "蜜大腿" },
+                            { value: "thigh gap", label: "大腿縫" },
+                            { value: "pelvic curtain", label: "人魚線/骨盆線" }
+                        ]
+                    },
+                    {
+                        name: "眼睛與視線",
+                        tags: [
+                            // 顏色
+                            { value: "blue eyes", label: "藍眼" },
+                            { value: "red eyes", label: "紅眼" },
+                            { value: "green eyes", label: "綠眼" },
+                            { value: "yellow eyes", label: "金/黃眼" },
+                            { value: "purple eyes", label: "紫眼" },
+                            { value: "heterochromia", label: "異色瞳" },
+                            // 形狀與特徵
+                            { value: "tsurime", label: "吊眼" },
+                            { value: "tareme", label: "垂眼" },
+                            { value: "cat eyes", label: "貓眼" },
+                            { value: "slit pupils", label: "豎瞳" },
+                            { value: "heart-shaped pupils", label: "愛心瞳孔" },
+                            { value: "star-shaped pupils", label: "星星瞳孔" },
+                            { value: "sanpaku", label: "三白眼" },
+                            { value: "eyelashes", label: "睫毛" },
+                            { value: "long eyelashes", label: "長睫毛" },
+                            { value: "bags under eyes", label: "黑眼圈/眼袋" }
                         ]
                     },
                     {
@@ -364,17 +523,6 @@ const tagCategories = {
                             { value: "tattoo", label: "刺青" },
                             { value: "tribal tattoo", label: "圖騰刺青" },
                             { value: "womb tattoo", label: "子宮紋" }
-                        ]
-                    },
-                    {
-                        name: "穿環",
-                        tags: [
-                            { value: "piercing", label: "穿環" },
-                            { value: "ear piercing", label: "耳環" },
-                            { value: "navel piercing", label: "肚臍環" },
-                            { value: "tongue piercing", label: "舌環" },
-                            { value: "nipple piercing", label: "乳環" },
-                            { value: "nose piercing", label: "鼻環" }
                         ]
                     }
                 ]
