@@ -97,7 +97,7 @@ const tagCategories = {
                             { value: "hero", label: "勇者" },
                             { value: "dark knight", label: "黑暗騎士" },
                             { value: "pirate", label: "海盜" },
-                            { value: "cowgirl", label: "牛仔" },
+                            { value: "cowboy costume", label: "牛仔" },
 
                             // --- 貴族與其他 ---
                             { value: "princess", label: "公主" },
@@ -162,7 +162,6 @@ const tagCategories = {
                             { value: "kitsune", label: "妖狐" },
                             { value: "wolf girl", label: "狼娘" },
                             { value: "dog girl", label: "犬娘" },
-                            { value: "bunny girl", label: "兔女郎" },
                             { value: "cow girl", label: "牛娘" },
                             { value: "sheep girl", label: "羊娘" },
                             { value: "mouse girl", label: "鼠娘" },
@@ -208,6 +207,38 @@ const tagCategories = {
                         ]
                     },
                     {
+                        name: "髮色",
+                        tags: [
+                            //一般髮色
+                            { value: "black hair", label: "黑髮" },
+                            { value: "brown hair", label: "棕髮" },
+                            { value: "dark brown hair", label: "深棕髮" },
+                            { value: "light brown hair", label: "淺棕髮" },
+                            { value: "blonde hair", label: "金髮" },
+                            { value: "platinum blonde hair", label: "白金髮" },
+                            { value: "dirty blonde hair", label: "暗金髮" },
+                            { value: "silver hair", label: "銀髮" },
+                            { value: "white hair", label: "白髮" },
+                            { value: "grey hair", label: "灰髮" },
+                            { value: "red hair", label: "紅髮" },
+                            { value: "ginger hair", label: "橘紅髮" },
+                            { value: "auburn hair", label: "赤褐髮" },
+                            //特殊髮色
+                            { value: "orange hair", label: "橘髮" },
+                            { value: "pink hair", label: "粉髮" },
+                            { value: "purple hair", label: "紫髮" },
+                            { value: "lavender hair", label: "薰衣草紫" },
+                            { value: "blue hair", label: "藍髮" },
+                            { value: "dark blue hair", label: "深藍髮" },
+                            { value: "light blue hair", label: "淺藍髮" },
+                            { value: "cyan hair", label: "青色髮" },
+                            { value: "aqua hair", label: "水藍髮" },
+                            { value: "green hair", label: "綠髮" },
+                            { value: "dark green hair", label: "深綠髮" },
+                            { value: "turquoise hair", label: "綠松石色" }
+                        ]
+                    },
+                    {
                         name: "綁髮",
                         tags: [
                             { value: "ponytail", label: "馬尾" },
@@ -228,7 +259,7 @@ const tagCategories = {
                             { value: "twin drills", label: "雙鑽頭捲" },
                             { value: "cone hair bun", label: "錐形丸子頭" },
                             { value: "side bun", label: "側丸子頭" },
-                            { value: "hair rings", label: "髮圈造型(像包包頭)" }
+                            { value: "hair rings", label: "髮圈/甜甜圈髮" }
                         ]
                     },
                     {
@@ -305,38 +336,6 @@ const tagCategories = {
                         ]
                     },
                     {
-                        name: "髮色",
-                        tags: [
-                            //一般髮色
-                            { value: "black hair", label: "黑髮" },
-                            { value: "brown hair", label: "棕髮" },
-                            { value: "dark brown hair", label: "深棕髮" },
-                            { value: "light brown hair", label: "淺棕髮" },
-                            { value: "blonde hair", label: "金髮" },
-                            { value: "platinum blonde hair", label: "白金髮" },
-                            { value: "dirty blonde hair", label: "暗金髮" },
-                            { value: "silver hair", label: "銀髮" },
-                            { value: "white hair", label: "白髮" },
-                            { value: "grey hair", label: "灰髮" },
-                            { value: "red hair", label: "紅髮" },
-                            { value: "ginger hair", label: "橘紅髮" },
-                            { value: "auburn hair", label: "赤褐髮" },
-                            //特殊髮色
-                            { value: "orange hair", label: "橘髮" },
-                            { value: "pink hair", label: "粉髮" },
-                            { value: "purple hair", label: "紫髮" },
-                            { value: "lavender hair", label: "薰衣草紫" },
-                            { value: "blue hair", label: "藍髮" },
-                            { value: "dark blue hair", label: "深藍髮" },
-                            { value: "light blue hair", label: "淺藍髮" },
-                            { value: "cyan hair", label: "青色髮" },
-                            { value: "aqua hair", label: "水藍髮" },
-                            { value: "green hair", label: "綠髮" },
-                            { value: "dark green hair", label: "深綠髮" },
-                            { value: "turquoise hair", label: "綠松石色" }
-                        ]
-                    },
-                    {
                         name: "染髮效果",
                         tags: [
                             { value: "gradient hair", label: "漸層髮色" },
@@ -394,7 +393,6 @@ const tagCategories = {
                             { value: "lanky", label: "瘦長" },
                             { value: "stout", label: "矮胖/結實" },
                             { value: "curvaceous", label: "曲線美(強烈)" },
-                            { value: "pregnant", label: "懷孕" },
                             { value: "body builder", label: "健身狂/健美身材" }
                         ]
                     },
@@ -414,9 +412,7 @@ const tagCategories = {
                             { value: "perky breasts", label: "挺拔的胸部" },
                             { value: "saggy breasts", label: "下垂的胸部" },
                             { value: "asymmetrical breasts", label: "大小奶" },
-                            { value: "nipples", label: "乳頭" },
-                            { value: "puffy nipples", label: "突起的乳頭" },
-                            { value: "areola", label: "乳暈" }
+                            { value: "puffy nipples", label: "突起的乳頭" }
                         ]
                     },
                     {
@@ -430,7 +426,7 @@ const tagCategories = {
                             { value: "flat ass", label: "扁臀" },
                             { value: "thick thighs", label: "蜜大腿" },
                             { value: "thigh gap", label: "大腿縫" },
-                            { value: "pelvic curtain", label: "人魚線/骨盆線" }
+                            { value: "pelvic curtain", label: "覆股溝/該邊線" }
                         ]
                     },
                     {
@@ -484,9 +480,6 @@ const tagCategories = {
                             { value: "bare shoulders", label: "露肩" },
                             { value: "bare back", label: "露背" },
                             { value: "armpits", label: "腋下" },
-                            { value: "wide hips", label: "寬臀" },
-                            { value: "thick thighs", label: "蜜大腿" },
-                            { value: "thigh gap", label: "大腿縫" },
                             { value: "long legs", label: "長腿" },
                             { value: "feet", label: "腳" },
                             { value: "soles", label: "腳底" },
@@ -583,11 +576,7 @@ const tagCategories = {
                             { value: "grinding", label: "磨蹭" },
                             { value: "grope", label: "揉胸/摸索" },
                             { value: "spread pussy", label: "張開小穴" },
-                            { value: "spread anus", label: "張開屁股" },
-                            { value: "simulated fellatio", label: "模擬口交(物體)" },
-                            { value: "simulated handjob", label: "模擬手交(物體)" },
-                            { value: "simulated paizuri", label: "模擬乳交(物體)" },
-                            { value: "simulated footjob", label: "模擬足交(物體)" }
+                            { value: "spread anus", label: "張開屁股" }
                         ]
                     },
                     {
@@ -614,10 +603,10 @@ const tagCategories = {
                             { value: "reverse cowgirl", label: "反向騎乘" },
                             { value: "mating press", label: "抱腿性交(Mating Press)" },
                             { value: "standing sex", label: "站立性交" },
-                            { value: "lifted by others", label: "抱起來做" },
+                            { value: "lifting person", label: "抱起來做" },
                             { value: "spooning", label: "側入/湯匙式" },
                             { value: "straddling", label: "跨坐" },
-                            { value: "legs over head", label: "M字開腳(抬腿)" },
+                            { value: "spread legs legs up", label: "M字開腳(抬腿)" },
                             { value: "69", label: "69式" },
                             { value: "from behind", label: "後入式" },
                             { value: "carrying", label: "火車便當/搬運" },
@@ -652,15 +641,13 @@ const tagCategories = {
                         tags: [
                             { value: "bondage", label: "綑綁" },
                             { value: "shibari", label: "日式龜甲縛" },
-                            { value: "rope", label: "繩子" },
+                            { value: "rope bondage", label: "繩縛" },
                             { value: "bdsm", label: "BDSM" },
                             { value: "spanking", label: "打屁股" },
                             { value: "choking", label: "勒頸/掐脖" },
                             { value: "gag", label: "口球" },
-                            { value: "blindfold", label: "蒙眼" },
                             { value: "suspended", label: "懸吊" },
                             { value: "leash", label: "牽繩/狗鍊" },
-                            { value: "collar", label: "項圈" },
                             { value: "tentacles", label: "觸手" },
                             { value: "femdom", label: "女帝/女攻" },
                             { value: "public sex", label: "野外/公眾性交" },
@@ -669,8 +656,6 @@ const tagCategories = {
                             { value: "arms tied", label: "雙手綑綁" },
                             { value: "legs tied", label: "雙腿綑綁" },
                             { value: "pet play", label: "寵物玩法" },
-                            { value: "sleeping", label: "睡姦/趁睡" },
-                            { value: "drunk", label: "酒醉" },
                             { value: "hypnosis", label: "催眠" }
                         ]
                     },
@@ -679,7 +664,6 @@ const tagCategories = {
                         tags: [
                             { value: "cum", label: "精液" },
                             { value: "creampie", label: "內射" },
-                            { value: "cum in pussy", label: "陰道內射" },
                             { value: "cum in mouth", label: "口內射精" },
                             { value: "cum on body", label: "身體射精" },
                             { value: "cum on face", label: "顏射" },
@@ -687,7 +671,7 @@ const tagCategories = {
                             { value: "cum drip", label: "精液流出" },
                             { value: "after sex", label: "事後" },
                             { value: "covered in cum", label: "全身精液" },
-                            { value: "squirting", label: "潮吹" },
+                            { value: "gushing", label: "潮吹" },
                             { value: "pussy juice", label: "愛液" },
                             { value: "saliva", label: "唾液" },
                             { value: "saliva trail", label: "唾液拉絲" },
@@ -750,7 +734,7 @@ const tagCategories = {
                             { value: "leaning", label: "倚靠" },
                             { value: "leaning forward", label: "前傾" },
                             { value: "leaning back", label: "後仰" },
-                            { value: "all fours", label: "四肢著地" },
+                            { value: "all fours", label: "狗爬式姿勢" },
                             { value: "w-sitting", label: "鴨子坐" },
                             { value: "seiza", label: "正坐" },
                             { value: "spread legs", label: "張腿" },
@@ -841,9 +825,7 @@ const tagCategories = {
                         name: "互動",
                         tags: [
                             { value: "hugging", label: "擁抱" },
-                            { value: "kissing", label: "親吻" },
                             { value: "holding hands", label: "牽手" },
-                            { value: "carrying", label: "搬運/抱著" },
                             { value: "princess carry", label: "公主抱" },
                             { value: "lap pillow", label: "膝枕" },
                             { value: "sleeping together", label: "共眠" },
@@ -855,7 +837,6 @@ const tagCategories = {
                     {
                         name: "頭部與視線",
                         tags: [
-                            { value: "looking back", label: "回頭" },
                             { value: "looking away", label: "看別處" },
                             { value: "looking down", label: "低頭" },
                             { value: "looking up", label: "抬頭" }
@@ -934,7 +915,6 @@ const tagCategories = {
                         name: "誘惑與H",
                         tags: [
                             { value: "aroused", label: "興奮(H)" },
-                            { value: "heavy breathing", label: "喘息" },
                             { value: "seductive smile", label: "誘惑笑" },
                             { value: "naughty face", label: "調皮/色氣臉" },
                             { value: "smirk", label: "壞笑" },
@@ -958,7 +938,6 @@ const tagCategories = {
                             { value: "tongue out", label: "吐舌" },
                             { value: "licking lips", label: "舔嘴唇" },
                             { value: "biting lip", label: "咬嘴唇" },
-                            { value: "saliva", label: "唾液" },
                             { value: "drooling", label: "流口水" },
                             { value: "fang", label: "虎牙" }
                         ]
@@ -974,16 +953,10 @@ const tagCategories = {
                             { value: "wide eyes", label: "睜大眼" },
                             { value: "rolling eyes", label: "翻白眼" },
                             { value: "cross-eyed", label: "鬥雞眼" },
-                            { value: "jitome", label: "盯視/鄙視眼" },
-                            { value: "tareme", label: "垂眼" },
-                            { value: "tsurime", label: "吊眼" },
-                            { value: "heart-shaped pupils", label: "愛心瞳孔" },
-                            { value: "star-shaped pupils", label: "星星瞳孔" },
+                            { value: "jitome", label: "半眼/死魚眼/鄙視眼" },
                             { value: "spiral eyes", label: "圈圈眼" },
                             { value: "glowing eyes", label: "發光眼" },
-                            { value: "empty eyes", label: "無神眼" },
-                            { value: "sanpaku", label: "三白眼" },
-                            { value: "bags under eyes", label: "黑眼圈" }
+                            { value: "empty eyes", label: "無神眼" }
                         ]
                     }
                 ]
@@ -1026,10 +999,10 @@ const tagCategories = {
                             { value: "shirt", label: "襯衫" },
                             { value: "white shirt", label: "白襯衫" },
                             { value: "open shirt", label: "襯衫敞開" },
-                            { value: "boyfriend shirt", label: "男友襯衫" },
+                            { value: "oversized shirt", label: "男友襯衫" },
                             { value: "blouse", label: "女襯衫" },
                             { value: "t-shirt", label: "T恤" },
-                            { value: "tank top", label: "背心" },
+                            { value: "tank top", label: "粗肩帶背心" },
                             { value: "camisole", label: "細肩帶背心" },
                             { value: "tube top", label: "平口背心" },
                             { value: "crop top", label: "短版上衣" },
@@ -1088,7 +1061,7 @@ const tagCategories = {
                             { value: "nurse uniform", label: "護士服" },
                             { value: "police uniform", label: "警服" },
                             { value: "military uniform", label: "軍服" },
-                            { value: "office lady uniform", label: "OL套裝" },
+                            { value: "office lady business suit", label: "OL套裝" },
                             { value: "suit", label: "西裝" }
                         ]
                     },
@@ -1142,15 +1115,15 @@ const tagCategories = {
                             { value: "knee highs", label: "膝下襪" },
                             { value: "thighhighs", label: "過膝襪" },
                             { value: "stockings", label: "長襪" },
-                            { value: "pantyhose", label: "連褲襪" },
-                            { value: "black pantyhose", label: "黑絲" },
+                            { value: "pantyhose", label: "絲襪" },
+                            { value: "black tights", label: "黑絲" },
                             { value: "white stockings", label: "白絲" },
                             { value: "fishnets", label: "網襪" },
                             { value: "torn pantyhose", label: "破絲襪" },
-                            { value: "bobby socks", label: "短襪" },
+                            { value: "folded socks", label: "短襪" },
                             { value: "loose socks", label: "泡泡襪" },
                             { value: "striped socks", label: "條紋襪" },
-                            { value: "garter straps", label: "吊襪帶" },
+                            { value: "garter belt", label: "吊襪帶" },
                             { value: "bare legs", label: "裸腿" }
                         ]
                     },
@@ -1213,7 +1186,6 @@ const tagCategories = {
                             { value: "necklace", label: "項鍊" },
                             { value: "choker", label: "頸圈" },
                             { value: "collar", label: "狗項圈" },
-                            { value: "leash", label: "牽繩" },
                             { value: "chain", label: "鎖鏈" },
                             { value: "tie", label: "領帶" },
                             { value: "scarf", label: "圍巾" },
@@ -1467,9 +1439,7 @@ const tagCategories = {
                             { value: "wide angle", label: "廣角" },
                             { value: "macro", label: "微距" },
                             { value: "isometric", label: "等軸測視角(2.5D)" },
-                            { value: "pov", label: "第一人稱視角" },
-                            { value: "looking at viewer", label: "直視鏡頭" },
-                            { value: "eye contact", label: "眼神接觸" }
+                            { value: "looking at viewer", label: "直視鏡頭" }
                         ]
                     },
                     {
