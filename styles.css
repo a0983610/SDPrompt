@@ -1,0 +1,32 @@
+/* 隱藏頁面主捲軸但保留功能 (針對 Chrome/Safari/Edge) */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* 針對 Firefox */
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+body {
+    background-color: #09090b;
+    /* zinc-950 */
+    color: #e4e4e7;
+    /* zinc-200 */
+}
+
+/* 拖曳時的樣式 */
+.dragging {
+    opacity: 0.5;
+    transform: scale(0.95);
+    border-color: #3b82f6;
+    /* blue-500 */
+}
+
+/* 按住 Ctrl 時改變游標提示 */
+body.ctrl-pressed .draggable-tag {
+    cursor: move !important;
+}
