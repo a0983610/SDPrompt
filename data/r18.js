@@ -2,7 +2,7 @@ window.tagCategories_r18 = {
     name: "瑟瑟",
     groups: [
         {
-            name: "前戲與脫衣 (Foreplay & Undressing)",
+            name: "前戲與脫衣",
             tags: [
                 { value: "nsfw", label: "NSFW" },
                 { value: "uncensored", label: "無修/無碼" },
@@ -31,7 +31,7 @@ window.tagCategories_r18 = {
             ]
         },
         {
-            name: "身體特寫 (Body Focus)",
+            name: "身體特寫",
             tags: [
                 { value: "disheveled hair", label: "頭髮凌亂" },
                 { value: "sweaty", label: "大汗淋漓" },
@@ -71,7 +71,7 @@ window.tagCategories_r18 = {
             ]
         },
         {
-            name: "前戲與愛撫 (Foreplay)",
+            name: "前戲與愛撫",
             tags: [
                 { value: "kissing", label: "親吻" },
                 { value: "french kiss", label: "舌吻" },
@@ -92,7 +92,7 @@ window.tagCategories_r18 = {
             ]
         },
         {
-            name: "自慰與道具 (Toys & Solo)",
+            name: "自慰與道具",
             tags: [
                 { value: "masturbation", label: "自慰" },
                 { value: "male masturbation", label: "男性自慰" },
@@ -118,7 +118,7 @@ window.tagCategories_r18 = {
             ]
         },
         {
-            name: "口交 (Oral)",
+            name: "口交",
             tags: [
                 { value: "fellatio", label: "口交(幫男)" },
                 { value: "cunnilingus", label: "舔穴(幫女)" },
@@ -133,7 +133,7 @@ window.tagCategories_r18 = {
             ]
         },
         {
-            name: "性交與體位 (Positions)",
+            name: "性交與體位",
             tags: [
                 { value: "sex", label: "性交" },
                 { value: "vaginal", label: "陰道性交" },
@@ -155,7 +155,7 @@ window.tagCategories_r18 = {
             ]
         },
         {
-            name: "BDSM與調教 (BDSM)",
+            name: "BDSM與調教",
             tags: [
                 { value: "bdsm", label: "BDSM" },
                 { value: "bondage", label: "綑綁" },
@@ -187,7 +187,7 @@ window.tagCategories_r18 = {
             ]
         },
         {
-            name: "情境與特殊 (Situations)",
+            name: "情境與特殊",
             tags: [
                 { value: "threesome", label: "3P" },
                 { value: "foursome", label: "4P" },
@@ -217,7 +217,7 @@ window.tagCategories_r18 = {
             ]
         },
         {
-            name: "事後與液體 (Aftermath)",
+            name: "事後與液體",
             tags: [
                 { value: "cum", label: "精液" },
                 { value: "ejaculation", label: "射精瞬間" },
