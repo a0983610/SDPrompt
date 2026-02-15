@@ -7,66 +7,84 @@ window.tagCategories_expression = {
                 { value: "smile", label: "微笑" },
                 { value: "light smile", label: "淺笑" },
                 { value: "gentle smile", label: "溫柔笑" },
+                { value: "happy", label: "開心" },
                 { value: "grin", label: "露齒笑" },
                 { value: "laughing", label: "大笑" },
-                { value: "happy", label: "開心" },
                 { value: "excited", label: "興奮" },
+                { value: "joy", label: "歡喜" },
                 { value: "confident", label: "自信" },
-                { value: "smug", label: "得意" },
-                { value: "proud", label: "驕傲" }
+                { value: "smug", label: "得意/跩臉" },
+                { value: "proud", label: "驕傲" },
+                { value: "triumphant", label: "勝利" }
             ]
         },
         {
             name: "悲傷與痛苦",
             tags: [
                 { value: "sad", label: "難過" },
+                { value: "gloom", label: "陰沉" },
+                { value: "depressed", label: "沮喪" },
+                { value: "lonely", label: "寂寞" },
                 { value: "crying", label: "哭泣" },
                 { value: "tears", label: "眼淚" },
                 { value: "streaming tears", label: "淚流滿面" },
+                { value: "wiping tears", label: "擦眼淚" },
                 { value: "sobbing", label: "啜泣" },
                 { value: "pain", label: "痛苦" },
-                { value: "gloom", label: "陰沉" },
-                { value: "depressed", label: "沮喪" },
-                { value: "despair", label: "絕望" }
+                { value: "anguish", label: "苦悶" },
+                { value: "despair", label: "絕望" },
+                { value: "broken", label: "崩潰" }
             ]
         },
         {
             name: "憤怒與厭惡",
             tags: [
                 { value: "angry", label: "生氣" },
+                { value: "rage", label: "暴怒" },
                 { value: "annoyed", label: "煩躁" },
+                { value: "frustrated", label: "受挫/氣餒" },
                 { value: "frowning", label: "皺眉" },
                 { value: "serious", label: "嚴肅" },
                 { value: "disgusted", label: "鄙視/噁心" },
-                { value: "glaring", label: "怒視" }
+                { value: "scowl", label: "怒容" },
+                { value: "glaring", label: "怒視" },
+                { value: "pout", label: "嘟嘴(賭氣)" }
             ]
         },
         {
-            name: "驚恐困惑",
+            name: "驚恐與困惑",
             tags: [
                 { value: "scared", label: "害怕" },
+                { value: "frightened", label: "受驚" },
                 { value: "terrified", label: "恐懼" },
                 { value: "screaming", label: "尖叫" },
+                { value: "shivering", label: "發抖" },
                 { value: "nervous", label: "緊張" },
+                { value: "anxious", label: "焦慮" },
                 { value: "panicked", label: "驚慌" },
                 { value: "surprised", label: "驚訝" },
+                { value: "shocked", label: "震驚" },
                 { value: "confused", label: "困惑" },
                 { value: "bored", label: "無聊" },
-                { value: "expressionless", label: "無表情" }
+                { value: "thinking", label: "思考" },
+                { value: "doubt", label: "懷疑" }
             ]
         },
         {
             name: "害羞與戀愛",
             tags: [
                 { value: "blush", label: "臉紅" },
+                { value: "heavy breathing", label: "喘息" },
                 { value: "shy", label: "害羞" },
                 { value: "embarrassed", label: "尷尬" },
+                { value: "ashamed", label: "羞恥" },
                 { value: "flustered", label: "慌張/不知所措" },
-                { value: "love struck", label: "戀愛腦/花痴" }
+                { value: "love struck", label: "戀愛腦/花痴" },
+                { value: "heart-shaped pupils", label: "愛心眼" }
             ]
         },
         {
-            name: "誘惑與H",
+            name: "誘惑與特殊",
             tags: [
                 { value: "aroused", label: "興奮(H)" },
                 { value: "seductive smile", label: "誘惑笑" },
@@ -74,15 +92,20 @@ window.tagCategories_expression = {
                 { value: "smirk", label: "壞笑" },
                 { value: "lewd", label: "淫蕩" },
                 { value: "ahegao", label: "阿嘿顏" },
+                { value: "torogao", label: "蕩漾臉/恍惚" },
                 { value: "orgasm face", label: "高潮臉" },
-                { value: "yandere", label: "病嬌" },
-                { value: "crazy", label: "瘋狂" },
                 { value: "drunk", label: "喝醉" },
-                { value: "sleepy", label: "想睡" }
+                { value: "tipsy", label: "微醺" },
+                { value: "crazy", label: "瘋狂" },
+                { value: "yandere", label: "病嬌" },
+                { value: "sleepy", label: "想睡" },
+                { value: "yawning", label: "打哈欠" },
+                { value: "expressionless", label: "無表情" },
+                { value: "poker face", label: "撲克臉" }
             ]
         },
         {
-            name: "嘴部動作",
+            name: "嘴部細節",
             tags: [
                 { value: "open mouth", label: "張嘴" },
                 { value: "closed mouth", label: "閉嘴" },
@@ -93,11 +116,13 @@ window.tagCategories_expression = {
                 { value: "licking lips", label: "舔嘴唇" },
                 { value: "biting lip", label: "咬嘴唇" },
                 { value: "drooling", label: "流口水" },
-                { value: "fang", label: "虎牙" }
+                { value: "fang", label: "虎牙/尖牙" },
+                { value: "shark teeth", label: "鯊魚牙" },
+                { value: "lipstick", label: "口紅" }
             ]
         },
         {
-            name: "眼部狀態",
+            name: "眼部細節",
             tags: [
                 { value: "closed eyes", label: "閉眼" },
                 { value: "half-closed eyes", label: "半閉眼" },
@@ -108,9 +133,22 @@ window.tagCategories_expression = {
                 { value: "rolling eyes", label: "翻白眼" },
                 { value: "cross-eyed", label: "鬥雞眼" },
                 { value: "jitome", label: "半眼/死魚眼/鄙視眼" },
+                { value: "sanpaku", label: "三白眼" },
                 { value: "spiral eyes", label: "圈圈眼" },
+                { value: "heart eyes", label: "愛心眼" },
                 { value: "glowing eyes", label: "發光眼" },
-                { value: "empty eyes", label: "無神眼" }
+                { value: "empty eyes", label: "無神眼/空洞眼" },
+                { value: "teary eyes", label: "淚眼汪汪" }
+            ]
+        },
+        {
+            name: "其他符號與特效",
+            tags: [
+                { value: "sweat", label: "汗水" },
+                { value: "sweatdrop", label: "汗珠(符號)" },
+                { value: "vein", label: "爆青筋" },
+                { value: "anger vein", label: "生氣符號" },
+                { value: "symbol-shaped pupils", label: "特殊符號瞳孔" }
             ]
         }
     ]
