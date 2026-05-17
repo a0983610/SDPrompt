@@ -71,6 +71,39 @@ window.tagCategories_r18 = {
             ]
         },
         {
+            name: "美腿與足部特寫",
+            tags: [
+                { value: "leg focus", label: "聚焦雙腿" },
+                { value: "thigh focus", label: "聚焦大腿" },
+                { value: "between thighs", label: "大腿之間" },
+                { value: "bare legs", label: "裸腿" },
+                { value: "slender legs", label: "纖細美腿" },
+                { value: "shapely legs", label: "線條美腿" },
+                { value: "zettai ryouiki", label: "絕對領域" },
+                { value: "crossed legs", label: "交叉雙腿" },
+                { value: "leg lock", label: "雙腿鎖定" },
+                { value: "wrapping legs", label: "雙腿纏繞" },
+                { value: "pantyhose focus", label: "絲襪特寫" },
+                { value: "stockings focus", label: "長襪特寫" },
+                { value: "thighhighs focus", label: "過膝襪特寫" },
+                { value: "feet focus", label: "聚焦足部" },
+                { value: "arched feet", label: "足弓" },
+                { value: "wrinkled soles", label: "腳底褶皺" },
+                { value: "toes through stockings", label: "絲襪腳趾" },
+                { value: "anklet", label: "腳鍊" },
+                { value: "toes", label: "腳趾" },
+                { value: "soles", label: "腳底" },
+                { value: "feet", label: "腳" },
+                { value: "thighhighs squeeze", label: "溢肉(過膝襪擠壓)" },
+                { value: "tight stockings", label: "緊身絲襪" },
+                { value: "indentation", label: "勒痕" },
+                { value: "fleshy", label: "肉感/豐腴" },
+                { value: "skin pinch", label: "捏肉" },
+                { value: "thigh gap", label: "大腿縫" },
+                { value: "skin tight", label: "緊貼肌膚" }
+            ]
+        },
+        {
             name: "前戲與愛撫",
             tags: [
                 { value: "kissing", label: "親吻" },
